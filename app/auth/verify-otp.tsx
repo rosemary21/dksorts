@@ -15,7 +15,7 @@ import Button from "@/components/_general/Button";
 import { ArrowRight } from "iconsax-react-native";
 
 const OTPVerification = () => {
-  const { verificationType, email, phone } = useLocalSearchParams();
+  const { verificationType, email, phone, hideEmail } = useLocalSearchParams();
   const [emailCodeSent, setEmailCodeSent] = useState(false);
   const [emailCode, setEmailCode] = useState("");
   const [phoneCodeSent, setPhoneCodeSent] = useState(false);
@@ -30,6 +30,12 @@ const OTPVerification = () => {
     case VerificationTypes.registration:
       pathname = ScreenNames.NINVerification.path;
       break;
+    case VerificationTypes.changeEmail:
+      pathname = ScreenNames.ChangeEmail.path;
+      break;
+    case VerificationTypes.changePhoneNumber:
+      pathname = ScreenNames.ChangePhoneNumber.path;
+      break;
     default:
       break;
   }
@@ -38,37 +44,39 @@ const OTPVerification = () => {
       title="Verification"
       description="Please verify your account to proceed"
     >
-      <InputField
-        editable={emailCodeSent}
-        onChangeText={(code) => {
-          setEmailCode(code);
-        }}
-        label={`Email (${email})`}
-        inputMode="numeric"
-        keyboardType="phone-pad"
-        placeholder={emailCodeSent ? "Input OTP" : "Click send code"}
-        rightIcon={
-          <TouchableOpacity
-            onPress={() => {
-              setEmailCodeSent(true);
-            }}
-          >
-            <TextComponent
-              color={
-                emailCodeSent && emailCode.length > 0
-                  ? greenColor.default
-                  : primaryColor.default
-              }
+      {!hideEmail && (
+        <InputField
+          editable={emailCodeSent}
+          onChangeText={(code) => {
+            setEmailCode(code);
+          }}
+          label={`Email (${email})`}
+          inputMode="numeric"
+          keyboardType="phone-pad"
+          placeholder={emailCodeSent ? "Input OTP" : "Click send code"}
+          rightIcon={
+            <TouchableOpacity
+              onPress={() => {
+                setEmailCodeSent(true);
+              }}
             >
-              {emailCodeSent
-                ? emailCode.length > 0
-                  ? "Verify Code"
-                  : "Resend Code (30s)"
-                : "Send Code"}
-            </TextComponent>
-          </TouchableOpacity>
-        }
-      />
+              <TextComponent
+                color={
+                  emailCodeSent && emailCode.length > 0
+                    ? greenColor.default
+                    : primaryColor.default
+                }
+              >
+                {emailCodeSent
+                  ? emailCode.length > 0
+                    ? "Verify Code"
+                    : "Resend Code (30s)"
+                  : "Send Code"}
+              </TextComponent>
+            </TouchableOpacity>
+          }
+        />
+      )}
       {(verificationType === VerificationTypes.registration || phone) && (
         <InputField
           editable={phoneCodeSent}
@@ -118,7 +126,7 @@ const OTPVerification = () => {
         }}
       >
         <TextComponent color={whiteColor.default}>Continue</TextComponent>
-        <ArrowRight {...defaultIconProps} />
+        <ArrowRight {...defaultIconProps} color={whiteColor.default} />
       </Button>
     </AuthLayout>
   );

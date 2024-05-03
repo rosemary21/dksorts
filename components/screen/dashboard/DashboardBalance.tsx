@@ -9,7 +9,8 @@ const DashboardBalance = () => {
       style={{
         alignItems: "center",
         gap: 4,
-        paddingVertical: 60
+        paddingVertical: 40,
+        marginTop: 30
       }}
     >
       <View

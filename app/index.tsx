@@ -17,8 +17,10 @@ import { router } from "expo-router";
 
 const GettingStarted = () => {
   const iconSize = 25,
-    backgroundColor = "#fee7e7";
+    backgroundColor = "#fee7e7",
+    iconColor = whiteColor.default;
   const { push } = router;
+
   return (
     <Container
       style={{
@@ -92,7 +94,11 @@ const GettingStarted = () => {
                 justifyContent: "center"
               }}
             >
-              <ArrowLeft {...defaultIconProps} size={iconSize} />
+              <ArrowLeft
+                {...defaultIconProps}
+                size={iconSize}
+                color={iconColor}
+              />
             </Button>
             <Button
               action={() => {
@@ -107,7 +113,11 @@ const GettingStarted = () => {
                 justifyContent: "center"
               }}
             >
-              <ArrowRight {...defaultIconProps} size={iconSize} />
+              <ArrowRight
+                {...defaultIconProps}
+                size={iconSize}
+                color={iconColor}
+              />
             </Button>
           </View>
         </View>

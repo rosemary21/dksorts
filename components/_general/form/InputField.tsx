@@ -9,7 +9,13 @@ import {
   View,
   ViewStyle
 } from "react-native";
-import React, { forwardRef, useEffect, useState } from "react";
+import React, {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState
+} from "react";
 import TextComponent from "../TextComponent";
 import { blackColor, redColor } from "@/assets/colors";
 import { InputFieldType } from "@/utils/types";
@@ -67,6 +73,7 @@ const InputField = forwardRef<TextInput, InputFieldType>(
       placeholderTextColor,
       onBlur,
       preventKeyBoardAutoHide,
+      keyboardType,
       ...props
     },
     ref
@@ -74,11 +81,19 @@ const InputField = forwardRef<TextInput, InputFieldType>(
     const [hidePassword, setHidePassword] = useState<boolean>(false),
       [leftIconWidth, setLeftIconWidth] = useState<number>(0),
       [rightIconWidth, setRightIconWidth] = useState<number>(0),
-      inputPadding = 15;
-
+      inputPadding = 15,
+      inputRef = useRef<TextInput>(null);
+    console.log(hidePassword);
     useEffect(() => {
       setHidePassword(secureTextEntry || false);
     }, [secureTextEntry]);
+    // useImperativeHandle(ref, () => ({
+    //   focus: () => {
+    //     if (inputRef.current) {
+    //       inputRef.current.focus();
+    //     }
+    //   }
+    // }));
     return (
       <View
         style={{
@@ -146,6 +161,13 @@ const InputField = forwardRef<TextInput, InputFieldType>(
               ...inputStyle
             }}
             secureTextEntry={hidePassword}
+            keyboardType={
+              secureTextEntry
+                ? !hidePassword
+                  ? "visible-password"
+                  : keyboardType
+                : keyboardType
+            }
             {...props}
           />
           {secureTextEntry && !rightIcon ? (

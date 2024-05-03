@@ -7,6 +7,8 @@ import LogoTransparentImage from "./logo-transparent.png";
 import LogoTransparentCroppedImage from "./logo-transparent-cropped.png";
 import MoniepointLogo from "./moniepoint-logo.png";
 import GettingStartedOneImage from "./getting-started-one.jpg";
+import DashboardBackground from "./dashboard-background.jpg";
+import WalletBackground from "./wallet-background.jpg";
 
 export {
   LoadingOne,
@@ -17,5 +19,7 @@ export {
   LogoTransparentImage,
   LogoTransparentCroppedImage,
   MoniepointLogo,
-  GettingStartedOneImage
+  GettingStartedOneImage,
+  DashboardBackground,
+  WalletBackground
 };

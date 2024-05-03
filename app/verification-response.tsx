@@ -27,7 +27,8 @@ const VerificationResponse = () => {
     >
       <LottieView
         autoPlay
-        loop
+        duration={4500}
+        loop={false}
         source={
           type === VerificationResponseType.success
             ? SuccessLottieAnimation

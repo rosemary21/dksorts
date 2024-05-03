@@ -1,18 +1,20 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, ViewStyle } from "react-native";
 import React from "react";
-import { blackColor, whiteColor } from "@/assets/colors";
+import { blackColor, primaryColor, whiteColor } from "@/assets/colors";
 import TextComponent from "@/components/_general/TextComponent";
 import { Poppins } from "@/assets/fonts";
 
-const TransactionCard: React.FC<{ invertColor?: boolean }> = ({
-  invertColor
-}) => {
+const TransactionCard: React.FC<{
+  invertColor?: boolean;
+  style?: ViewStyle;
+}> = ({ invertColor, style }) => {
   return (
     <View
       style={{
         flexDirection: "row",
         alignItems: "center",
-        gap: 20
+        gap: 20,
+        ...style
       }}
     >
       <View
@@ -20,8 +22,8 @@ const TransactionCard: React.FC<{ invertColor?: boolean }> = ({
           width: 50,
           height: 50,
           backgroundColor: invertColor
-            ? blackColor.opacity100
-            : whiteColor.opacity100,
+            ? whiteColor.opacity100
+            : primaryColor.opacity100,
           borderRadius: 1000
         }}
       ></View>
@@ -32,20 +34,20 @@ const TransactionCard: React.FC<{ invertColor?: boolean }> = ({
         }}
       >
         <TextComponent
-          color={invertColor ? blackColor.default : whiteColor.default}
+          color={invertColor ? whiteColor.default : blackColor.default}
           fontFamily={Poppins.semiBold.default}
         >
           Data purchased
         </TextComponent>
         <TextComponent
-          color={invertColor ? blackColor.opacity400 : whiteColor.opacity400}
+          color={invertColor ? whiteColor.opacity400 : blackColor.opacity400}
         >
           Today, 09:05 am
         </TextComponent>
       </View>
 
       <TextComponent
-        color={invertColor ? blackColor.default : whiteColor.default}
+        color={invertColor ? whiteColor.default : blackColor.default}
         fontFamily={Poppins.bold.default}
         fontSize={20}
       >

@@ -21,7 +21,9 @@ import {
   Lock,
   IconProps,
   Brodcast,
-  TableDocument
+  TableDocument,
+  Scanner,
+  Sms
 } from "iconsax-react-native";
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get("screen");
@@ -34,6 +36,7 @@ export const padding = 25,
     color: blackColor.default
   },
   nav = "nav",
+  settings = "settings",
   buttonTypes = {
     primary: "primary",
     secondary: "secondary",
@@ -115,78 +118,99 @@ export const padding = 25,
       showIn: [nav]
     },
     Payments: {
-      path: "Payments",
+      path: "/user/payment",
       Icon: CardPos,
-      label: "Payments & Purchases",
-      activeNames: ["Payments"],
+      label: "Payments",
+      activeNames: ["/user/payment"],
       showIn: [nav]
     },
     Wallet: {
-      path: "Wallet",
+      path: "/user/wallet",
       Icon: Wallet,
       ActiveIcon: Wallet1,
       label: "Wallet",
-      activeNames: ["Wallet"],
+      activeNames: ["/user/wallet"],
       showIn: [nav]
     },
     Account: {
-      path: "Account",
+      path: "/user/settings",
       Icon: UserOctagon,
       label: "Account",
-      activeNames: ["Account"],
+      activeNames: ["/user/settings"],
       showIn: [nav]
     },
     ProfileInformation: {
-      path: "ProfileInformation",
+      path: "/user/settings/account",
       Icon: User,
       label: "Profile Information",
-      activeNames: ["ProfileInformation"],
-      showIn: []
+      activeNames: ["/user/settings/account"],
+      showIn: [settings]
+    },
+    ChangeEmail: {
+      path: "/user/settings/email",
+      Icon: Sms,
+      label: "Change Email",
+      activeNames: ["/user/settings/email"],
+      showIn: [settings]
+    },
+    ChangePhoneNumber: {
+      path: "/user/settings/phone-number",
+      Icon: Mobile,
+      label: "Change Phone Number",
+      activeNames: ["/user/settings/phone-number"],
+      showIn: [settings]
     },
     ChangePin: {
-      path: "ChangePin",
+      path: "/user/settings/pin",
       Icon: Lock,
       label: "Change Pin",
-      activeNames: ["ChangePin"],
-      showIn: []
+      activeNames: ["/user/settings/pin"],
+      showIn: [settings]
+    },
+    ResetPassword: {
+      path: "/user/settings/password",
+      Icon: ShieldSecurity,
+      label: "Reset Password",
+      activeNames: ["/user/settings/password"],
+      showIn: [settings]
     },
     BuyData: {
-      path: "BuyData",
+      path: "/user/payment/data",
       Icon: Wifi,
       label: "Purchase data",
       activeNames: ["BuyData"],
       showIn: []
     },
     BuyAirtime: {
-      path: "BuyAirtime",
+      path: "/user/payment/airtime",
       Icon: CallOutgoing,
       label: "Purchase airtime",
       activeNames: ["BuyAirtime"],
       showIn: []
     },
     ElectricityPayment: {
-      path: "ElectricityPayment",
+      path: "/user/payment/electricity",
       Icon: LampCharge,
       label: "Electricity bills payment",
       activeNames: ["ElectricityPayment"],
       showIn: []
     },
     CableSubscription: {
-      path: "CableSubscription",
+      path: "/user/payment/cable",
       Icon: Brodcast,
       label: "Cable / TV subscription",
       activeNames: ["CableSubscription"],
       showIn: []
     },
     WaecPin: {
-      path: "CableSubscription",
-      Icon: Brodcast,
+      path: "/user/payment/waec",
+      Icon: Scanner,
       label: "Cable / TV subscription",
       activeNames: ["CableSubscription"],
       showIn: []
     },
     ViewDataPlans: {
-      path: "ViewDataPlans",
+      path: "/user/payments/data-plans",
       Icon: TableDocument,
       label: "Data plans",
       activeNames: ["ViewDataPlans"],
@@ -195,7 +219,9 @@ export const padding = 25,
   },
   VerificationTypes = {
     forgotPassword: "forgot-password",
-    registration: "registration"
+    registration: "registration",
+    changeEmail: "change-email",
+    changePhoneNumber: "change-phone-number"
   },
   VerificationResponseType = {
     success: "Success",
@@ -204,13 +230,6 @@ export const padding = 25,
   DashboardAction: {
     [path: string]: DashboardActionType;
   } = {
-    Data: {
-      path: ScreenNames.BuyData.path,
-      title: "Data",
-      text: "Stay connected always by buying data at cheapest rate",
-      Icon: ScreenNames.BuyData.Icon as React.FC<IconProps>,
-      isSpecial: true
-    },
     Airtime: {
       path: ScreenNames.BuyAirtime.path,
       title: "Airtime",
@@ -224,6 +243,13 @@ export const padding = 25,
       text: "Ensure consistent power supply for your appliances",
       Icon: ScreenNames.ElectricityPayment.Icon as React.FC<IconProps>,
       isSpecial: false
+    },
+    Data: {
+      path: ScreenNames.BuyData.path,
+      title: "Data",
+      text: "Stay connected always by buying data at cheapest rate",
+      Icon: ScreenNames.BuyData.Icon as React.FC<IconProps>,
+      isSpecial: true
     },
     TVSubscription: {
       path: ScreenNames.CableSubscription.path,
@@ -244,6 +270,9 @@ export const padding = 25,
   allDashboardActions = convertObjectToArray(DashboardAction),
   navRoutes = allScreenNames.filter((screenName) =>
     screenName.showIn.includes(nav)
+  ),
+  settingsRoutes = allScreenNames.filter((screenName) =>
+    screenName.showIn.includes(settings)
   );
 
 export { windowHeight, windowWidth, screenWidth, screenHeight };

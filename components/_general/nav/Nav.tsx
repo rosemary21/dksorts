@@ -13,7 +13,7 @@ const Nav = () => {
         gap: 10,
         justifyContent: "space-between",
         paddingHorizontal: padding,
-        paddingVertical: 20
+        paddingVertical: 30
       }}
     >
       {navRoutes.map((screenName, index) => (

@@ -1,6 +1,7 @@
 import {
   StyleSheet,
   Text,
+  TextStyle,
   TouchableOpacity,
   View,
   ViewStyle
@@ -23,10 +24,11 @@ import { ScreenNamesType } from "@/utils/types";
 import LoggedInHeader from "../_general/LoggedInHeader";
 import { usePathname, useRouter } from "expo-router";
 
-const Header: React.FC<{ headerText: string; hideBackArrow?: boolean }> = ({
-  headerText,
-  hideBackArrow
-}) => {
+const Header: React.FC<{
+  headerText: string;
+  hideBackArrow?: boolean;
+  headerTextStyle?: TextStyle;
+}> = ({ headerText, hideBackArrow, headerTextStyle }) => {
   const { goBack } = useNavigation();
   return (
     <View
@@ -47,7 +49,8 @@ const Header: React.FC<{ headerText: string; hideBackArrow?: boolean }> = ({
       <TextComponent
         textAlign="center"
         style={{
-          flex: 1
+          flex: 1,
+          ...headerTextStyle
         }}
       >
         {headerText || "Screen"}
@@ -59,6 +62,7 @@ const Header: React.FC<{ headerText: string; hideBackArrow?: boolean }> = ({
 
 const LoggedInContainer: React.FC<{
   hideHeader?: boolean;
+  headerTextStyle?: TextStyle;
   hideNav?: boolean;
   header?: React.ReactNode;
   headerText?: string;
@@ -78,7 +82,8 @@ const LoggedInContainer: React.FC<{
   contentContainerStyle,
   children,
   unScrollable,
-  unSafeView
+  unSafeView,
+  headerTextStyle
 }) => {
   const [activeScreen, setActiveScreen] = useState<ScreenNamesType | null>(
       null
@@ -117,9 +122,13 @@ const LoggedInContainer: React.FC<{
             ? header
             : !hideHeader &&
               (activeScreen?.showIn?.includes(nav) ? (
-                <LoggedInHeader headerText={headerText} />
+                <LoggedInHeader
+                  headerTextStyle={headerTextStyle}
+                  headerText={headerText}
+                />
               ) : (
                 <Header
+                  headerTextStyle={headerTextStyle}
                   headerText={headerText || activeScreen?.label || "Screen"}
                   hideBackArrow={hideBackArrow}
                 />

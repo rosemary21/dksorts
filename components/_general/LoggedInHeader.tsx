@@ -1,4 +1,10 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  TextStyle,
+  TouchableOpacity,
+  View
+} from "react-native";
 import React from "react";
 import { ScreenNames, padding } from "@/utils/_variables";
 import TextComponent from "./TextComponent";
@@ -7,7 +13,10 @@ import { greeting } from "@/utils/functions";
 import { useNavigation } from "@react-navigation/native";
 import ProfileImage from "../screen/_general/ProfileImage";
 
-const LoggedInHeader: React.FC<{ headerText?: string }> = ({ headerText }) => {
+const LoggedInHeader: React.FC<{
+  headerText?: string;
+  headerTextStyle?: TextStyle;
+}> = ({ headerText, headerTextStyle }) => {
   const { navigate } = useNavigation();
   return (
     <View
@@ -20,7 +29,13 @@ const LoggedInHeader: React.FC<{ headerText?: string }> = ({ headerText }) => {
         justifyContent: "space-between"
       }}
     >
-      <TextComponent>{headerText || greeting()}</TextComponent>
+      <TextComponent
+        style={{
+          ...headerTextStyle
+        }}
+      >
+        {headerText || greeting()}
+      </TextComponent>
 
       <TouchableOpacity
         onPress={() => {

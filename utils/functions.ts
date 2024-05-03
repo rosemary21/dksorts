@@ -49,12 +49,12 @@ export const Vibrate: (type: VibrationTypes) => void = (type = "short") => {
 
 export const constructVerificationTypeObject = (
   verificationType: string,
-  email: string,
+  email?: string,
   phone?: string
 ) => ({
   verificationType,
-  phone,
-  email
+  email,
+  phone
 });
 
 export const getComponentLayoutProperties: (data: LayoutChangeEvent) => {
