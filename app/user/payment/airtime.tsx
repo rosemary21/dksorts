@@ -41,7 +41,9 @@ const Airtime = () => {
       />
 
       <Button
-        action={() => {}}
+        action={() => {
+          push(ScreenNames.RequestPin.path);
+        }}
         type="primary"
         style={{
           alignItems: "center"

@@ -49,7 +49,7 @@ const SelectBox: React.FC<SelectBoxType> = ({
           borderWidth: 1,
           borderColor: error
             ? redColor.opacity400
-            : inputBorderColor || whiteColor.opacity200,
+            : inputBorderColor || blackColor.opacity200,
           alignItems: "center",
           paddingVertical: 0,
           ...boxStyles
@@ -61,13 +61,13 @@ const SelectBox: React.FC<SelectBoxType> = ({
           // paddingLeft:  inputPadding,
           // paddingRight: inputPadding,
           flex: 1,
-          color: whiteColor.default
+          color: blackColor.default
         }}
         setSelected={(val: string) => setSelected(val)}
         data={data || []}
         save="value"
         dropdownTextStyles={{
-          color: whiteColor.default
+          color: blackColor.default
         }}
       />
       {error && typeof error !== "boolean" && (

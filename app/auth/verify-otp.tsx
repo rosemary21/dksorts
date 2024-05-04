@@ -1,9 +1,8 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React, { useState } from "react";
 import { router, useLocalSearchParams } from "expo-router";
 import AuthLayout from "@/components/_layouts/AuthLayout";
 import InputField from "@/components/_general/form/InputField";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import TextComponent from "@/components/_general/TextComponent";
 import { greenColor, primaryColor, whiteColor } from "@/assets/colors";
 import {

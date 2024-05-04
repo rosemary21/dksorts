@@ -25,6 +25,7 @@ import {
   Scanner,
   Sms
 } from "iconsax-react-native";
+import { Delete } from "lucide-react-native";
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get("screen");
 const { width: windowWidth, height: windowHeight } = Dimensions.get("window");
@@ -167,6 +168,13 @@ export const padding = 25,
       activeNames: ["/user/settings/pin"],
       showIn: [settings]
     },
+    RequestPin: {
+      path: "/user/request-pin",
+      Icon: Lock,
+      label: "Request Pin",
+      activeNames: ["/user/request-pin"],
+      showIn: []
+    },
     ResetPassword: {
       path: "/user/settings/password",
       Icon: ShieldSecurity,
@@ -178,35 +186,42 @@ export const padding = 25,
       path: "/user/payment/data",
       Icon: Wifi,
       label: "Purchase data",
-      activeNames: ["BuyData"],
+      activeNames: ["/user/payment/data"],
       showIn: []
     },
     BuyAirtime: {
       path: "/user/payment/airtime",
       Icon: CallOutgoing,
       label: "Purchase airtime",
-      activeNames: ["BuyAirtime"],
+      activeNames: ["/user/payment/airtime"],
       showIn: []
     },
     ElectricityPayment: {
       path: "/user/payment/electricity",
       Icon: LampCharge,
       label: "Electricity bills payment",
-      activeNames: ["ElectricityPayment"],
+      activeNames: ["/user/payment/electricity"],
       showIn: []
     },
     CableSubscription: {
       path: "/user/payment/cable",
       Icon: Brodcast,
       label: "Cable / TV subscription",
-      activeNames: ["CableSubscription"],
+      activeNames: ["/user/payment/cable"],
       showIn: []
     },
     WaecPin: {
       path: "/user/payment/waec",
       Icon: Scanner,
-      label: "Cable / TV subscription",
-      activeNames: ["CableSubscription"],
+      label: "WAEC Pin",
+      activeNames: ["/user/payment/waec"],
+      showIn: []
+    },
+    GenerateWaecPin: {
+      path: "/user/payment/waec/generate",
+      Icon: Scanner,
+      label: "Generate Waec Pin",
+      activeNames: ["/user/payment/waec/generate"],
       showIn: []
     },
     ViewDataPlans: {
@@ -266,6 +281,34 @@ export const padding = 25,
       isSpecial: false
     }
   },
+  pinKeys = [
+    [
+      { key: "1", showIn: [], type: "letter" },
+      { key: "2", showIn: [], type: "letter" },
+      { key: "3", showIn: [], type: "letter" }
+    ],
+    [
+      { key: "4", showIn: [], type: "letter" },
+      { key: "5", showIn: [], type: "letter" },
+      { key: "6", showIn: [], type: "letter" }
+    ],
+    [
+      { key: "7", showIn: [], type: "letter" },
+      { key: "8", showIn: [], type: "letter" },
+      { key: "9", showIn: [], type: "letter" }
+    ],
+    [
+      { key: "", showIn: [], type: "letter" },
+      { key: "0", showIn: [], type: "letter" },
+      {
+        key: "",
+        Icon: Delete,
+        showIn: [],
+        type: "icon",
+        action: "backspace"
+      }
+    ]
+  ],
   allScreenNames = convertObjectToArray(ScreenNames),
   allDashboardActions = convertObjectToArray(DashboardAction),
   navRoutes = allScreenNames.filter((screenName) =>

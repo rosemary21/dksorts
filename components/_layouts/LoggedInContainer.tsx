@@ -28,7 +28,8 @@ const Header: React.FC<{
   headerText: string;
   hideBackArrow?: boolean;
   headerTextStyle?: TextStyle;
-}> = ({ headerText, hideBackArrow, headerTextStyle }) => {
+  rightContent?: React.ReactNode;
+}> = ({ headerText, hideBackArrow, headerTextStyle, rightContent }) => {
   const { goBack } = useNavigation();
   return (
     <View
@@ -55,7 +56,7 @@ const Header: React.FC<{
       >
         {headerText || "Screen"}
       </TextComponent>
-      {!hideBackArrow && <View></View>}
+      {(!hideBackArrow || rightContent) && <View>{rightContent}</View>}
     </View>
   );
 };
@@ -72,6 +73,7 @@ const LoggedInContainer: React.FC<{
   children: React.ReactNode;
   unScrollable?: boolean;
   unSafeView?: boolean;
+  rightContent?: React.ReactNode;
 }> = ({
   hideHeader,
   hideNav,
@@ -83,7 +85,8 @@ const LoggedInContainer: React.FC<{
   children,
   unScrollable,
   unSafeView,
-  headerTextStyle
+  headerTextStyle,
+  rightContent
 }) => {
   const [activeScreen, setActiveScreen] = useState<ScreenNamesType | null>(
       null
@@ -131,6 +134,7 @@ const LoggedInContainer: React.FC<{
                   headerTextStyle={headerTextStyle}
                   headerText={headerText || activeScreen?.label || "Screen"}
                   hideBackArrow={hideBackArrow}
+                  rightContent={rightContent}
                 />
               ))}
           <View

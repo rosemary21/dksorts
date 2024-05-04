@@ -1,10 +1,9 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
 import { primaryColor } from "@/assets/colors";
 import TextComponent from "@/components/_general/TextComponent";
 import { whiteColor } from "../../../assets/colors";
 import { Poppins } from "@/assets/fonts";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import { Copy } from "iconsax-react-native";
 import { defaultIconProps } from "@/utils/_variables";
 
