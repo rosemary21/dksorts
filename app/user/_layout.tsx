@@ -3,6 +3,12 @@ import { Slot, Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 
 export default function GeneralLayout() {
+  const modalScreenOptions = {
+    presentation: "transparentModal",
+    contentStyle: {
+      backgroundColor: "transparent"
+    }
+  } as any;
   return (
     <>
       <StatusBar style="dark" backgroundColor={whiteColor.default} />
@@ -17,15 +23,15 @@ export default function GeneralLayout() {
         <Stack.Screen
           name="request-pin"
           options={{
-            presentation: "transparentModal",
-            animation: "fade_from_bottom"
+            animation: "fade_from_bottom",
+            ...modalScreenOptions
           }}
         />
         <Stack.Screen
           name="payment/waec/generate"
           options={{
-            presentation: "transparentModal",
-            animation: "fade_from_bottom"
+            animation: "fade_from_bottom",
+            ...modalScreenOptions
           }}
         />
         {/* <Slot /> */}
