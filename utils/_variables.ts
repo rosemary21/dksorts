@@ -1,4 +1,5 @@
-import { Dimensions } from "react-native";
+import { Dimensions, Platform } from "react-native";
+import * as Device from "expo-device";
 import {
   DashboardActionType,
   ImageDimensionType,
@@ -36,6 +37,7 @@ export const padding = 25,
     size: iconSize,
     color: blackColor.default
   },
+  generalError = "Unable to determine error. Please try again!",
   nav = "nav",
   settings = "settings",
   buttonTypes = {
@@ -52,6 +54,25 @@ export const padding = 25,
     round: "round",
     square: "square"
   },
+  deviceDetails = {
+    brand: Device.brand,
+    name: Device.deviceName,
+    type: Device.deviceType,
+    yearClass: Device.deviceYearClass,
+    manufacturer: Device.manufacturer,
+    modelName: Device.modelName,
+    osBuildId: Device.osBuildId,
+    osInternalBuildId: Device.osInternalBuildId,
+    osName: Device.osName,
+    osVersion: Device.osVersion
+  },
+  modalScreenOptions = {
+    animation: "fade_from_bottom",
+    presentation: "transparentModal",
+    contentStyle: {
+      backgroundColor: "transparent"
+    }
+  } as any,
   ScreenNames: {
     [path: string]: ScreenNamesType;
   } = {
@@ -109,6 +130,13 @@ export const padding = 25,
       Icon: undefined,
       label: "Verification response",
       activeNames: ["/verification-response"],
+      showIn: []
+    },
+    ErrorModal: {
+      path: "/error-modal",
+      Icon: undefined,
+      label: "Error modal",
+      activeNames: ["/error-modal"],
       showIn: []
     },
     Dashboard: {

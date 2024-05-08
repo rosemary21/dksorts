@@ -1,9 +1,51 @@
 import { AxiosError, AxiosResponse } from "axios";
 import Login from "../screens/login/Login";
 
+export type OTPType = "R" | "F";
+export type NotificationType = "M" | "S";
+
+export interface GeneralResponseType {
+  code: string;
+  message: string;
+}
 export interface LoginBodyType {
-  phoneNumber?: string;
-  password?: string;
+  phoneNumber: string;
+  password: string;
+  deviceId: string;
+  deviceName: string;
+}
+export interface RegisterBodyType {
+  phoneNumber: string;
+  email: string;
+  referred?: string;
+  longitude?: string;
+  dateOfBirth: string;
+  latitude?: string;
+  password: string;
+  confirmPassword: string;
+  deviceId: string;
+  mobileVersion: string;
+  mobileOs: string;
+  mobileOsVer: string;
+  deviceName: string;
+  mobileVersionId: string;
+}
+
+export interface RequestOTPBodyType {
+  otpId: string;
+  otpType: OTPType;
+  notificationType: NotificationType;
+  sendSource?: string;
+}
+export interface VerifyOTPBodyType {
+  otpId: string;
+  otpType: OTPType;
+  notificationType: NotificationType;
+  otp: string;
+}
+export interface AddNINBodyType {
+  number_nin: string;
+  emailAddress: string;
 }
 export interface SendChangePasswordOTPType {
   phoneNumber?: string;
@@ -23,6 +65,10 @@ export interface UserDetailsType {
 }
 export interface LoginResponseType extends UserDetailsType {
   token?: string;
+  isFirstTimeLogin: boolean;
+  validDevice: "N";
+  stage: "0";
+  resp: GeneralResponseType;
 }
 
 export interface AddBVNResponseType {
@@ -49,19 +95,17 @@ export interface ErrorResponseType {
   status?: string;
 }
 
-export type AllBodyType = LoginBodyType &
-  AddBVNBodyType &
-  SetPinBodyType &
-  VerifyOTPBodyType &
-  ResetPasswordBodyType &
-  SendChangePasswordOTPType;
+export type AllBodyType =
+  | LoginBodyType
+  | AddBVNBodyType
+  | SetPinBodyType
+  | VerifyOTPBodyType
+  | ResetPasswordBodyType
+  | SendChangePasswordOTPType;
 
 export type AllResponseType = ErrorResponseType &
   AllBodyType &
-  LoginResponseType &
-  AddBVNResponseType &
-  SignUpResponseType &
-  SetPinResponseType;
+  LoginResponseType;
 
 export type AllRequestType = "post" | "get" | "delete" | "put";
 
@@ -78,8 +122,8 @@ export interface ResponseType {
   code: string | number;
   statusText: string;
   response: {
-    message: string;
-    time: string;
+    status: string;
+    time?: string;
     data: AllResponseType;
   };
 }

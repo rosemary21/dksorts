@@ -15,7 +15,7 @@ import { setHeaderAuthorization } from "@/api";
 import { saveUserToken } from "@/localServices/function";
 
 interface UserContextFunctionTypes {
-  setToken: (payload?: string) => void;
+  setToken: (payload?: string | null) => void;
   setUserDetails: (payload?: UserDetailsType) => void;
 }
 
@@ -28,7 +28,7 @@ const UserContext = createContext<InitialValueType & UserContextFunctionTypes>({
 export const UserProvider: React.FC<FormProviderTypes> = ({ children }) => {
   const [state, dispatch] = useReducer(userReducer, userInitialValue);
 
-  const setToken = useCallback((payload?: string) => {
+  const setToken = useCallback((payload?: string | null) => {
     dispatch({
       type: SET_USER_TOKEN,
       payload: payload || null

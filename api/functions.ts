@@ -1,19 +1,21 @@
+import { AxiosRequestConfig } from "axios";
 import { deleteData, getData, postData, putData } from ".";
 import { requestType } from "./_variables";
 import {
   AllBodyType,
   ApiRequestResponseType,
   ApiURLType,
-  ResponseType,
+  ResponseType
 } from "./index.d";
 
 export const processRequest: (
   api: ApiURLType,
-  data: AllBodyType | undefined
-) => ApiRequestResponseType = (api, data) => {
+  data?: AllBodyType | undefined,
+  options?: AxiosRequestConfig
+) => ApiRequestResponseType = (api, data, options) => {
   return new Promise<ResponseType>((resolve, reject) => {
     if (api.method === requestType.post) {
-      postData(api.url, data)
+      postData(api.url, data, options)
         .then((res) => {
           resolve(res);
         })
@@ -21,7 +23,7 @@ export const processRequest: (
           reject(err);
         });
     } else if (api.method === requestType.put) {
-      putData(api.url, data)
+      putData(api.url, data, options)
         .then((res) => {
           resolve(res);
         })
@@ -29,7 +31,7 @@ export const processRequest: (
           reject(err);
         });
     } else if (api.method === requestType.get) {
-      getData(api.url)
+      getData(api.url, options)
         .then((res) => {
           resolve(res);
         })
@@ -37,7 +39,7 @@ export const processRequest: (
           reject(err);
         });
     } else if (api.method === requestType.delete) {
-      deleteData(api.url, data)
+      deleteData(api.url, options)
         .then((res) => {
           resolve(res);
         })

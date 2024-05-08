@@ -1,16 +1,21 @@
 import { StyleSheet, Text, View } from "react-native";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { RootSiblingParent } from "react-native-root-siblings";
 import { useFonts } from "expo-font";
 import { Poppins } from "@/assets/fonts";
 import * as SplashScreen from "expo-splash-screen";
+import { useActionContext, useUserContext } from "@/context";
+import { getUserToken } from "@/localServices/function";
 
 SplashScreen.preventAutoHideAsync();
 
 const AppContainer: React.FC<{ children: React.ReactNode }> = ({
   children
 }) => {
+  const { appLoaded, setAppLoaded } = useActionContext();
+  const { setToken } = useUserContext();
+  const [localServiceRan, setLocalServiceRan] = useState(false);
   const [fontsLoaded] = useFonts({
     [Poppins.regular
       .default]: require("@/assets/fonts/Poppins/Poppins-Regular.ttf"),
@@ -38,19 +43,30 @@ const AppContainer: React.FC<{ children: React.ReactNode }> = ({
   });
 
   useEffect(() => {
-    if (fontsLoaded) {
-      // Hide the splash screen after the fonts have loaded (or an error was returned) and the UI is ready.
+    (async () => {
+      const token = await getUserToken();
+      setToken(token);
+      setLocalServiceRan(true);
+    })();
+  }, []);
+
+  useEffect(() => {
+    if (localServiceRan && fontsLoaded) {
+      setAppLoaded();
+    }
+  }, [localServiceRan, fontsLoaded]);
+
+  useEffect(() => {
+    if (appLoaded) {
       SplashScreen.hideAsync();
     }
-  }, [fontsLoaded]);
+  }, [appLoaded]);
 
   return (
-    fontsLoaded && (
-      <RootSiblingParent>
-        <GestureHandlerRootView style={{ flex: 1 }}>
-          {children}
-        </GestureHandlerRootView>
-      </RootSiblingParent>
+    appLoaded && (
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        {children}
+      </GestureHandlerRootView>
     )
   );
 };

@@ -1,4 +1,4 @@
-import axios, { AxiosError } from "axios";
+import axios, { AxiosError, AxiosRequestConfig } from "axios";
 import { baseURL } from "./url";
 import {
   AllBodyType,
@@ -18,17 +18,18 @@ const api = axios.create({
 
 export const setHeaderAuthorization: (token: string) => void = (token) => {
     if (token) {
-      api.defaults.headers.common["Authorization"] = `${token}`;
+      api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
     }
   },
   postData: (
     url: string,
-    data: AllBodyType | undefined
-  ) => ApiRequestResponseType = (url, data) => {
+    data: AllBodyType | undefined,
+    options?: AxiosRequestConfig
+  ) => ApiRequestResponseType = (url, data, options) => {
     return new Promise<ResponseType>((resolve, reject) => {
       if (data) {
         api
-          .post(url, data)
+          .post(url, data, options)
           .then((res) => {
             resolve({
               type: status.success,
@@ -38,7 +39,7 @@ export const setHeaderAuthorization: (token: string) => void = (token) => {
             });
           })
           .catch((err: AxiosError<ErrorResponseType, ErrorResponseType>) => {
-            console.log(err);
+            // console.log(err);
             reject({
               type: status.error,
               code: err?.response?.status || err?.code,
@@ -56,10 +57,13 @@ export const setHeaderAuthorization: (token: string) => void = (token) => {
       }
     });
   },
-  getData: (url: string) => ApiRequestResponseType = (url) => {
+  getData: (
+    url: string,
+    options?: AxiosRequestConfig
+  ) => ApiRequestResponseType = (url, options) => {
     return new Promise<ResponseType>((resolve, reject) => {
       api
-        .get(url)
+        .get(url, options)
         .then((res) => {
           resolve({
             type: status.success,
@@ -80,12 +84,13 @@ export const setHeaderAuthorization: (token: string) => void = (token) => {
   },
   putData: (
     url: string,
-    data: AllBodyType | undefined
-  ) => ApiRequestResponseType = (url, data) => {
+    data: AllBodyType | undefined,
+    options?: AxiosRequestConfig
+  ) => ApiRequestResponseType = (url, data, options) => {
     return new Promise<ResponseType>((resolve, reject) => {
       if (data) {
         api
-          .put(url, data)
+          .put(url, data, options)
           .then((res) => {
             resolve({
               type: status.success,
@@ -112,13 +117,13 @@ export const setHeaderAuthorization: (token: string) => void = (token) => {
       }
     });
   },
-  deleteData: (url: string, data: any) => ApiRequestResponseType = (
-    url,
-    data
-  ) => {
+  deleteData: (
+    url: string,
+    options?: AxiosRequestConfig
+  ) => ApiRequestResponseType = (url, options) => {
     return new Promise<ResponseType>((resolve, reject) => {
       api
-        .delete(url, data)
+        .delete(url, options)
         .then((res) => {
           resolve({
             type: status.success,

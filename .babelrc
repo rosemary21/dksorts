@@ -1,7 +1,7 @@
 {
     "plugins": [
       ["module:react-native-dotenv", {
-        "envName": "Winride_ENV",
+        "envName": "Dkelucrative_ENV",
         "moduleName": "@env",
         "path": ".env",
         "blocklist": null,

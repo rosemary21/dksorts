@@ -7,11 +7,12 @@ import React, {
 } from "react";
 import { actionInitialValue, actionReducer } from "@/reducers";
 import { ActionProviderTypes } from "@/utils/types";
-import { SET_COLOR_SCHEME } from "@/utils/_enums";
+import { APP_LOADED, SET_COLOR_SCHEME } from "@/utils/_enums";
 
 const ActionContext = createContext({
   ...actionInitialValue,
-  getColorScheme: (): void => {}
+  getColorScheme: (): void => {},
+  setAppLoaded: (): void => {}
 });
 
 export const ActionProvider: React.FC<ActionProviderTypes> = ({ children }) => {
@@ -25,8 +26,15 @@ export const ActionProvider: React.FC<ActionProviderTypes> = ({ children }) => {
     });
   }, [colorScheme]);
 
+  const setAppLoaded = useCallback(() => {
+    dispatch({
+      type: APP_LOADED,
+      payload: true
+    });
+  }, []);
+
   return (
-    <ActionContext.Provider value={{ ...state, getColorScheme }}>
+    <ActionContext.Provider value={{ ...state, getColorScheme, setAppLoaded }}>
       {children}
     </ActionContext.Provider>
   );

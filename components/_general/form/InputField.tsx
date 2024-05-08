@@ -83,7 +83,6 @@ const InputField = forwardRef<TextInput, InputFieldType>(
       [rightIconWidth, setRightIconWidth] = useState<number>(0),
       inputPadding = 15,
       inputRef = useRef<TextInput>(null);
-    console.log(hidePassword);
     useEffect(() => {
       setHidePassword(secureTextEntry || false);
     }, [secureTextEntry]);

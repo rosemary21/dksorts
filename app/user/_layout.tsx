@@ -1,14 +1,9 @@
 import { whiteColor } from "@/assets/colors";
+import { modalScreenOptions } from "@/utils/_variables";
 import { Slot, Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 
 export default function GeneralLayout() {
-  const modalScreenOptions = {
-    presentation: "transparentModal",
-    contentStyle: {
-      backgroundColor: "transparent"
-    }
-  } as any;
   return (
     <>
       <StatusBar style="dark" backgroundColor={whiteColor.default} />
