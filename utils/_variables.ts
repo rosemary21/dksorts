@@ -161,6 +161,22 @@ export const padding = 25,
       activeNames: ["/user/wallet"],
       showIn: [nav]
     },
+    GenerateWallet: {
+      path: "/user/wallet/generate",
+      Icon: Wallet,
+      ActiveIcon: Wallet1,
+      label: "Generate wallet",
+      activeNames: ["/user/wallet/generate"],
+      showIn: []
+    },
+    CreatePin: {
+      path: "/user/wallet/create-pin",
+      Icon: Wallet,
+      ActiveIcon: Wallet1,
+      label: "Create pin",
+      activeNames: ["/user/wallet/create-pin"],
+      showIn: []
+    },
     Account: {
       path: "/user/settings",
       Icon: UserOctagon,
@@ -276,6 +292,7 @@ export const padding = 25,
     Airtime: {
       path: ScreenNames.BuyAirtime.path,
       title: "Airtime",
+      code: "AIRTIME",
       text: "Get airtime to spend more times with your loved ones",
       Icon: ScreenNames.BuyAirtime.Icon as React.FC<IconProps>,
       isSpecial: false
@@ -283,6 +300,7 @@ export const padding = 25,
     Electricity: {
       path: ScreenNames.ElectricityPayment.path,
       title: "Electricity",
+      code: "UTILITYBILLS",
       text: "Ensure consistent power supply for your appliances",
       Icon: ScreenNames.ElectricityPayment.Icon as React.FC<IconProps>,
       isSpecial: false
@@ -290,6 +308,7 @@ export const padding = 25,
     Data: {
       path: ScreenNames.BuyData.path,
       title: "Data",
+      code: "MOBILEDATA",
       text: "Stay connected always by buying data at cheapest rate",
       Icon: ScreenNames.BuyData.Icon as React.FC<IconProps>,
       isSpecial: true
@@ -297,17 +316,18 @@ export const padding = 25,
     TVSubscription: {
       path: ScreenNames.CableSubscription.path,
       title: "TV",
+      code: "CABLEBILLS",
       text: "Ensure consistent power supply for your appliances",
       Icon: ScreenNames.CableSubscription.Icon as React.FC<IconProps>,
       isSpecial: false
-    },
-    WaecPin: {
-      path: ScreenNames.WaecPin.path,
-      title: "WAEC Pin",
-      text: "Ensure consistent power supply for your appliances",
-      Icon: ScreenNames.WaecPin.Icon as React.FC<IconProps>,
-      isSpecial: false
     }
+    // WaecPin: {
+    //   path: ScreenNames.WaecPin.path,
+    //   title: "WAEC Pin",
+    //   text: "Ensure consistent power supply for your appliances",
+    //   Icon: ScreenNames.WaecPin.Icon as React.FC<IconProps>,
+    //   isSpecial: false
+    // }
   },
   pinKeys = [
     [

@@ -178,6 +178,7 @@ export interface SelectBoxOptionType {
 export interface DashboardActionType {
   title: string;
   text: string;
+  code: string;
   action?: () => void;
   Icon: React.FC<IconProps>;
   style?: ViewStyle;

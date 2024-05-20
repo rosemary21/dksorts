@@ -2,6 +2,7 @@ import { LayoutChangeEvent, Vibration } from "react-native";
 import { VibrationTypes } from "./types";
 import { vibrationLengths } from "./data";
 import Toast, { ToastOptions } from "react-native-root-toast";
+import { Clipboard } from "react-native";
 
 export const backspaceText: (
   text: string,
@@ -176,6 +177,10 @@ export const validateValues: <T>(
   }
 
   return error;
+};
+
+export const copyToClipboard = (text: string) => {
+  Clipboard.setString(text);
 };
 
 export const addText: (

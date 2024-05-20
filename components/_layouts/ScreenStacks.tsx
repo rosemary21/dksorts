@@ -10,7 +10,7 @@ const ScreenStacks = () => {
   return (
     <Stack
       initialRouteName={
-        token ? ScreenNames.User.path : ScreenNames.GettingStarted.path
+        token ? ScreenNames.Dashboard.path : ScreenNames.GettingStarted.path
       }
       screenOptions={{
         headerShown: false,

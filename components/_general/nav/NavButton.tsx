@@ -26,7 +26,9 @@ const NavButton: React.FC<ScreenNamesType> = ({
   return (
     <TouchableOpacity
       onPress={() => {
-        push(path);
+        if (!isActive) {
+          push(path);
+        }
       }}
       style={{
         alignItems: "center",

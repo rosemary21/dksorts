@@ -1,4 +1,4 @@
-import { getSecureData, storeSecureData } from ".";
+import { deleteSecureData, getSecureData, storeSecureData } from ".";
 import { serviceKeys } from "./variables";
 
 export const saveUserToken = (token: string): Promise<void> => {
@@ -6,4 +6,7 @@ export const saveUserToken = (token: string): Promise<void> => {
 };
 export const getUserToken = (): Promise<string | null> => {
   return getSecureData(serviceKeys.token);
+};
+export const deleteUserToken = (): Promise<void> => {
+  return deleteSecureData(serviceKeys.token);
 };

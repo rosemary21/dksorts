@@ -8,7 +8,7 @@ import AuthLayout from "@/components/_layouts/AuthLayout";
 import { Link, router } from "expo-router";
 import { deviceDetails, generalError, ScreenNames } from "@/utils/_variables";
 import { primaryColor } from "../../assets/colors";
-import { LoginBodyType } from "@/api/index.d";
+import { LoginBodyType, LoginResponseType } from "@/api/index.d";
 import { processRequest } from "@/api/functions";
 import { loginApi } from "@/api/url";
 import { showToast, validateValues } from "@/utils/functions";
@@ -16,16 +16,17 @@ import { phoneNumberRegExp } from "@/utils/regex";
 import { saveUserToken } from "@/localServices/function";
 import { useUserContext } from "@/context";
 import { setHeaderAuthorization } from "@/api";
+import useUser from "@/hooks/useUser";
 
 const Login = () => {
   const { push } = router;
+  const { makeUseWithToken } = useUser();
   const initialFormValue: LoginBodyType = {
     deviceId: deviceDetails.osInternalBuildId || deviceDetails.osBuildId || "",
     deviceName: deviceDetails.name || "",
     password: "",
     phoneNumber: ""
   };
-  const { setToken } = useUserContext();
   const [loading, setLoading] = useState(false);
   const [loginForm, setLoginForm] = useState(initialFormValue);
   const [loginFormErr, setLoginFormErr] = useState(initialFormValue);
@@ -58,13 +59,11 @@ const Login = () => {
       setLoading(true);
       processRequest(loginApi, loginForm)
         .then((res) => {
-          console.log(res);
-          const token = res?.response?.data?.token;
+          const response = res?.response as LoginResponseType;
+          const token = response.data?.token;
 
           if (token) {
-            saveUserToken(token);
-            setToken(token);
-            setHeaderAuthorization(token);
+            makeUseWithToken(token, true);
             showToast("Login successful");
           } else {
             push({
@@ -79,11 +78,10 @@ const Login = () => {
           // push(ScreenNames.Dashboard.path);
         })
         .catch((err) => {
-          console.log(err);
           push({
             pathname: ScreenNames.ErrorModal.path,
             params: {
-              error: err?.statusText
+              error: err?.response?.data?.resp?.message ?? err?.statusText
             }
           });
           showToast(err?.statusText || generalError);

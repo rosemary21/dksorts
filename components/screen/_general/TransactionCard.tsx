@@ -3,11 +3,39 @@ import React from "react";
 import { blackColor, primaryColor, whiteColor } from "@/assets/colors";
 import TextComponent from "@/components/_general/TextComponent";
 import { Poppins } from "@/assets/fonts";
+import moment from "moment";
 
 const TransactionCard: React.FC<{
   invertColor?: boolean;
   style?: ViewStyle;
-}> = ({ invertColor, style }) => {
+  description: string;
+  amount: number;
+  timeTransaction: Date;
+}> = ({ invertColor, style, description, amount, timeTransaction }) => {
+  const purchasedDate = new Date(timeTransaction);
+  const purchasedYear = moment(purchasedDate).format("YYYY");
+  const purchasedMonth = moment(purchasedDate).format("M");
+  const purchasedDay = moment(purchasedDate).format("D");
+  const purchasedHour = moment(purchasedDate).format("HH");
+  const purchasedMin = moment(purchasedDate).format("mm");
+  const date = new Date();
+  const todayYear = moment(date).format("YYYY");
+  const todayMonth = moment(date).format("M");
+  const today = moment(date).format("D");
+  const presentHour = moment(date).format("HH");
+  const presentMinute = moment(date).format("mm");
+  let purchaseTime = `${purchasedHour}:${purchasedMin}`;
+
+  const isToday =
+    todayYear === purchasedYear &&
+    todayMonth === purchasedMonth &&
+    today === purchasedDay;
+
+  const elapsedHour = parseInt(presentHour) - parseInt(purchasedHour);
+
+  if (elapsedHour <= 1) {
+    const oneHourToSecs = 3600;
+  }
   return (
     <View
       style={{
@@ -37,12 +65,15 @@ const TransactionCard: React.FC<{
           color={invertColor ? whiteColor.default : blackColor.default}
           fontFamily={Poppins.semiBold.default}
         >
-          Data purchased
+          {description}
         </TextComponent>
         <TextComponent
           color={invertColor ? whiteColor.opacity400 : blackColor.opacity400}
         >
-          Today, 09:05 am
+          {isToday
+            ? "Today"
+            : `${purchasedDay}/${purchasedMonth}/${purchasedYear}`}
+          , {purchaseTime}
         </TextComponent>
       </View>
 
@@ -51,7 +82,7 @@ const TransactionCard: React.FC<{
         fontFamily={Poppins.bold.default}
         fontSize={20}
       >
-        ₦220
+        ₦{amount}
       </TextComponent>
     </View>
   );

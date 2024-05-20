@@ -2,30 +2,82 @@ import { ApiURLType } from "./index.d";
 import { requestType } from "./_variables";
 
 export const apiVersion = "/api/v1",
-  baseURL = `https://javapaas-171468-0.cloudclusters.net${apiVersion}`,
+  baseURL = `https://javapaas-172625-0.cloudclusters.net${apiVersion}`,
   loginApi: ApiURLType = {
     method: requestType.post,
     url: "/login/customer"
   },
   signupApi: ApiURLType = {
     method: requestType.post,
-    url: "/registration/send-otp"
+    url: "/user/add"
   },
-  verifyRegistrationOTPApi: ApiURLType = {
+  sendOTPApi: ApiURLType = {
     method: requestType.post,
-    url: "/registration/verify-otp"
+    url: "/otp/request"
+  },
+  verifyOTPApi: ApiURLType = {
+    method: requestType.post,
+    url: "/otp/authenticate"
+  },
+  verifyNINApi: ApiURLType = {
+    method: requestType.post,
+    url: "/nin/request"
+  },
+  verifyEmailApi: ApiURLType = {
+    method: requestType.post,
+    url: "/verify/email"
+  },
+  verifyPhoneNumberApi: ApiURLType = {
+    method: requestType.post,
+    url: "/verify/phonenumber"
   },
   addBVNApi: ApiURLType = {
     method: requestType.post,
-    url: "/registration/add-bvn"
+    url: "/bvn"
   },
   setPinApi: ApiURLType = {
     method: requestType.post,
-    url: "/registration/set-pin"
+    url: "/pin"
+  },
+  validatePinApi: ApiURLType = {
+    method: requestType.post,
+    url: "/pin/validatepin"
+  },
+  fetchBillerApi: (code: string) => ApiURLType = (code) => ({
+    method: requestType.get,
+    url: `/billspayment/billers/${code}`
+  }),
+  fetchBillerOptionsApi: (billerCode: string) => ApiURLType = (billerCode) => ({
+    method: requestType.get,
+    url: `/billspayment/billercode/${billerCode}`
+  }),
+  createBillApi: ApiURLType = {
+    method: requestType.post,
+    url: "/billspayment/create"
+  },
+  changePinApi: ApiURLType = {
+    method: requestType.post,
+    url: "/pin/changepin"
   },
   changePasswordApi: ApiURLType = {
+    method: requestType.post,
+    url: "/user/changepassword"
+  },
+  resetPasswordApi: ApiURLType = {
     method: requestType.put,
-    url: "/forgot-password/reset-password"
+    url: "/user/resetpassword"
+  },
+  changeEmailApi: ApiURLType = {
+    method: requestType.put,
+    url: "/user/resetemail"
+  },
+  changePhoneNumberApi: ApiURLType = {
+    method: requestType.put,
+    url: "/user/resetphonenumber"
+  },
+  changeProfileApi: ApiURLType = {
+    method: requestType.post,
+    url: "/user/resetprofile"
   },
   sendChangePasswordOTPApi: ApiURLType = {
     method: requestType.post,
@@ -34,4 +86,8 @@ export const apiVersion = "/api/v1",
   verifyChangePasswordOTPApi: ApiURLType = {
     method: requestType.post,
     url: "/forgot-password/verify-otp"
+  },
+  fetchUserDetailsApi: ApiURLType = {
+    method: requestType.get,
+    url: "/user/userid"
   };

@@ -1,13 +1,19 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
 import { WalletBackground } from "@/assets/images";
-import { whiteColor } from "@/assets/colors";
+import { blackColor, primaryColor, whiteColor } from "@/assets/colors";
 import TextComponent from "@/components/_general/TextComponent";
 import { Poppins } from "@/assets/fonts";
 import { Copy } from "iconsax-react-native";
-import { defaultIconProps } from "@/utils/_variables";
+import { defaultIconProps, ScreenNames } from "@/utils/_variables";
+import useUser from "@/hooks/useUser";
+import LottieView from "lottie-react-native";
+import { BalanceLoader } from "@/assets/lotties";
+import { Link } from "expo-router";
+import { copyToClipboard } from "@/utils/functions";
 
 const WalletBalance = () => {
+  const { userDetails } = useUser();
   return (
     <View
       style={{
@@ -56,48 +62,96 @@ const WalletBalance = () => {
               Wallet balance
             </TextComponent>
 
-            <View
-              style={{
-                alignItems: "center",
-                flexDirection: "row"
+            {!userDetails ? (
+              <View
+                style={{
+                  width: 100,
+                  height: 30,
+                  alignItems: "center",
+                  justifyContent: "center",
+                  overflow: "hidden"
+                }}
+              >
+                <LottieView
+                  source={BalanceLoader}
+                  autoPlay
+                  loop
+                  style={{
+                    width: 250,
+                    height: 250
+                  }}
+                />
+              </View>
+            ) : (
+              <View
+                style={{
+                  alignItems: "center",
+                  flexDirection: "row"
+                }}
+              >
+                <TextComponent>₦</TextComponent>
+                <TextComponent
+                  fontSize={30}
+                  fontFamily={Poppins.semiBold.default}
+                >
+                  {userDetails?.balance}
+                </TextComponent>
+              </View>
+            )}
+          </View>
+
+          {userDetails && userDetails.isAccountNonLocked && (
+            <TouchableOpacity
+              onPress={() => {
+                copyToClipboard(userDetails.walletAccount);
               }}
             >
-              <TextComponent>₦</TextComponent>
+              <Copy {...defaultIconProps} size={25} />
+            </TouchableOpacity>
+          )}
+        </View>
+
+        {userDetails &&
+          (!userDetails?.isAccountNonLocked ? (
+            <Link
+              href={ScreenNames.GenerateWallet.path}
+              style={{ flexDirection: "row", alignItems: "center" }}
+            >
               <TextComponent
-                fontSize={30}
-                fontFamily={Poppins.semiBold.default}
+                color={primaryColor.default}
+                style={{
+                  textDecorationColor: primaryColor.default,
+                  textDecorationLine: "underline",
+                  textDecorationStyle: "solid",
+                  marginTop: 20
+                }}
               >
-                100,000
+                Click to generate wallet
               </TextComponent>
+            </Link>
+          ) : (
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "flex-end",
+                justifyContent: "space-between",
+                width: "100%"
+              }}
+            >
+              <View
+                style={{
+                  gap: 2
+                }}
+              >
+                <TextComponent>{userDetails.bankName}</TextComponent>
+                <TextComponent fontSize={20} fontFamily={Poppins.bold.default}>
+                  {userDetails.walletAccount}
+                </TextComponent>
+              </View>
+
+              <TextComponent>{userDetails.accountName}</TextComponent>
             </View>
-          </View>
-
-          <TouchableOpacity>
-            <Copy {...defaultIconProps} size={25} />
-          </TouchableOpacity>
-        </View>
-
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "flex-end",
-            justifyContent: "space-between",
-            width: "100%"
-          }}
-        >
-          <View
-            style={{
-              gap: 2
-            }}
-          >
-            <TextComponent>Moniepoint</TextComponent>
-            <TextComponent fontSize={20} fontFamily={Poppins.bold.default}>
-              1234567890
-            </TextComponent>
-          </View>
-
-          <TextComponent>Isaac Omonimewa</TextComponent>
-        </View>
+          ))}
       </View>
     </View>
   );

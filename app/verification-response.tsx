@@ -68,6 +68,7 @@ const VerificationResponse = () => {
       <Button
         action={() => {
           if (nextScreenName) {
+            back();
             push(nextScreenName as string);
           } else {
             back();

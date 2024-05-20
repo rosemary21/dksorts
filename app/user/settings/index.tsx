@@ -19,9 +19,14 @@ import {
 import ProfileImage from "@/components/screen/_general/ProfileImage";
 import { Poppins } from "@/assets/fonts";
 import { router } from "expo-router";
+import { setHeaderAuthorization } from "@/api";
+import { deleteUserToken } from "@/localServices/function";
+import { useUserContext } from "@/context";
+import useUser from "@/hooks/useUser";
 
 const Settings = () => {
   const { push } = router;
+  const { logoutUser, userDetails } = useUser();
   return (
     <LoggedInContainer
       hideHeader
@@ -60,7 +65,7 @@ const Settings = () => {
             fontFamily={Poppins.semiBold.default}
             textAlign="center"
           >
-            Isaac Omonimewa
+            {userDetails?.firstName} {userDetails?.lastName}
           </TextComponent>
           <TextComponent
             style={{
@@ -68,7 +73,7 @@ const Settings = () => {
             }}
             textAlign="center"
           >
-            isaacseun63@gmail.com
+            {userDetails?.email}
           </TextComponent>
           <TextComponent
             style={{
@@ -76,7 +81,7 @@ const Settings = () => {
             }}
             textAlign="center"
           >
-            +23490336634645
+            {userDetails?.phoneNumber}
           </TextComponent>
         </View>
       </View>
@@ -154,6 +159,7 @@ const Settings = () => {
         }}
       >
         <TouchableOpacity
+          onPress={logoutUser}
           style={{
             flexDirection: "row",
             alignItems: "center",

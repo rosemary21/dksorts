@@ -10,6 +10,7 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { primaryColor } from "../assets/colors";
 import { Poppins } from "@/assets/fonts";
 import { router, useLocalSearchParams } from "expo-router";
+import { windowWidth } from "@/utils/_variables";
 
 const ErrorModal = () => {
   const { error } = useLocalSearchParams();
@@ -38,12 +39,19 @@ const ErrorModal = () => {
         <TextComponent
           textAlign="center"
           style={{
-            opacity: 0.6
+            opacity: 0.6,
+            maxWidth: windowWidth * 0.7
           }}
         >
           Error occurred when processing request
         </TextComponent>
-        <TextComponent fontFamily={Poppins.semiBold.default} textAlign="center">
+        <TextComponent
+          style={{
+            maxWidth: windowWidth * 0.7
+          }}
+          fontFamily={Poppins.semiBold.default}
+          textAlign="center"
+        >
           Reason: {error || "Unknown"}
         </TextComponent>
       </View>

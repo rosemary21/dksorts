@@ -67,7 +67,8 @@ const Button: React.FC<ButtonType> = ({
     <View
       style={{
         overflow: "hidden",
-        borderRadius: 15
+        borderRadius: 15,
+        opacity: disabled ? 0.6 : 1
       }}
     >
       <View

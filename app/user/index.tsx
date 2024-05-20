@@ -55,6 +55,7 @@ const Dashboard = () => {
 
       <AddFundsCard />
       <TransactionList
+        max={5}
         showBorder
         style={
           {

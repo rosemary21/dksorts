@@ -5,6 +5,9 @@ import { Poppins } from "@/assets/fonts";
 import { greenColor, primaryColor } from "@/assets/colors";
 import { ArrowDown, ArrowUp } from "iconsax-react-native";
 import { defaultIconProps } from "@/utils/_variables";
+import useUser from "@/hooks/useUser";
+import LottieView from "lottie-react-native";
+import { ApiLoadingLottieAnimation } from "@/assets/lotties";
 
 const WalletStatisticCard: React.FC<{
   value: string;
@@ -23,17 +26,29 @@ const WalletStatisticCard: React.FC<{
         backgroundColor: alternate ? primaryColor.opacity100 : "#e6e6e6"
       }}
     >
-      <View
-        style={{
-          alignItems: "center",
-          flexDirection: "row"
-        }}
-      >
-        <TextComponent>₦</TextComponent>
-        <TextComponent fontSize={20} fontFamily={Poppins.semiBold.default}>
-          {value}
-        </TextComponent>
-      </View>
+      {value ? (
+        <View
+          style={{
+            alignItems: "center",
+            flexDirection: "row"
+          }}
+        >
+          <TextComponent>₦</TextComponent>
+          <TextComponent fontSize={20} fontFamily={Poppins.semiBold.default}>
+            {value}
+          </TextComponent>
+        </View>
+      ) : (
+        <LottieView
+          source={ApiLoadingLottieAnimation}
+          autoPlay
+          loop
+          style={{
+            width: 50,
+            height: 50
+          }}
+        />
+      )}
       <View
         style={{
           alignItems: "center",
@@ -47,6 +62,7 @@ const WalletStatisticCard: React.FC<{
 };
 
 const WalletStatistic = () => {
+  const { userDetails } = useUser();
   return (
     <View
       style={{
@@ -55,8 +71,15 @@ const WalletStatistic = () => {
         gap: 10
       }}
     >
-      <WalletStatisticCard label="Funded" value="300,000" />
-      <WalletStatisticCard label="Spent" value="200,000" alternate />
+      <WalletStatisticCard
+        label="Funded"
+        value={userDetails?.totalFunded?.toString() || ""}
+      />
+      <WalletStatisticCard
+        label="Spent"
+        value={userDetails?.totalSpent?.toString() || ""}
+        alternate
+      />
     </View>
   );
 };

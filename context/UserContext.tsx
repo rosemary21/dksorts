@@ -8,21 +8,30 @@ import React, {
 } from "react";
 import { FormProviderTypes } from "@/utils/types";
 import { userInitialValue, userReducer } from "@/reducers";
-import { SET_USER_DETAILS, SET_USER_TOKEN } from "@/utils/_enums";
+import {
+  RESET_USER_CONTEXT,
+  SET_USER_DETAILS,
+  SET_USER_TOKEN,
+  SET_USER_TRANSACTIONS
+} from "@/utils/_enums";
 import { InitialValueType } from "@/reducers/userReducer";
-import { UserDetailsType } from "@/api/index.d";
+import { TransactionDetailsType, UserDetailsType } from "@/api/index.d";
 import { setHeaderAuthorization } from "@/api";
 import { saveUserToken } from "@/localServices/function";
 
 interface UserContextFunctionTypes {
   setToken: (payload?: string | null) => void;
   setUserDetails: (payload?: UserDetailsType) => void;
+  setUserTransactions: (payload?: TransactionDetailsType[]) => void;
+  resetUserContext: () => void;
 }
 
 const UserContext = createContext<InitialValueType & UserContextFunctionTypes>({
   ...userInitialValue,
   setToken: () => {},
-  setUserDetails: () => {}
+  setUserDetails: () => {},
+  resetUserContext: () => {},
+  setUserTransactions: () => {}
 });
 
 export const UserProvider: React.FC<FormProviderTypes> = ({ children }) => {
@@ -40,6 +49,20 @@ export const UserProvider: React.FC<FormProviderTypes> = ({ children }) => {
       payload: payload || null
     });
   }, []);
+  const setUserTransactions = useCallback(
+    (payload?: TransactionDetailsType[]) => {
+      dispatch({
+        type: SET_USER_TRANSACTIONS,
+        payload: payload || []
+      });
+    },
+    []
+  );
+  const resetUserContext = useCallback(() => {
+    dispatch({
+      type: RESET_USER_CONTEXT
+    });
+  }, []);
 
   useEffect(() => {
     console.log(state);
@@ -50,7 +73,15 @@ export const UserProvider: React.FC<FormProviderTypes> = ({ children }) => {
   }, [state.token]);
 
   return (
-    <UserContext.Provider value={{ ...state, setToken, setUserDetails }}>
+    <UserContext.Provider
+      value={{
+        ...state,
+        setToken,
+        setUserDetails,
+        resetUserContext,
+        setUserTransactions
+      }}
+    >
       {children}
     </UserContext.Provider>
   );

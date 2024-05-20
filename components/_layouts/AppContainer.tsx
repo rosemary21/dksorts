@@ -7,6 +7,7 @@ import { Poppins } from "@/assets/fonts";
 import * as SplashScreen from "expo-splash-screen";
 import { useActionContext, useUserContext } from "@/context";
 import { getUserToken } from "@/localServices/function";
+import useUser from "@/hooks/useUser";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -14,7 +15,8 @@ const AppContainer: React.FC<{ children: React.ReactNode }> = ({
   children
 }) => {
   const { appLoaded, setAppLoaded } = useActionContext();
-  const { setToken } = useUserContext();
+  const { setToken, token } = useUserContext();
+  const { makeUseWithToken } = useUser();
   const [localServiceRan, setLocalServiceRan] = useState(false);
   const [fontsLoaded] = useFonts({
     [Poppins.regular
@@ -45,7 +47,7 @@ const AppContainer: React.FC<{ children: React.ReactNode }> = ({
   useEffect(() => {
     (async () => {
       const token = await getUserToken();
-      setToken(token);
+      makeUseWithToken(token);
       setLocalServiceRan(true);
     })();
   }, []);

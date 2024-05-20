@@ -5,7 +5,7 @@ import {
   TouchableOpacity,
   View
 } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import AuthLayout from "@/components/_layouts/AuthLayout";
 import InputField from "@/components/_general/form/InputField";
 import Button from "@/components/_general/Button";
@@ -14,18 +14,21 @@ import { primaryColor, whiteColor } from "@/assets/colors";
 import { ScreenNames, VerificationTypes } from "@/utils/_variables";
 import { Link, router } from "expo-router";
 import { constructVerificationTypeObject } from "@/utils/functions";
+import { useFormContext } from "@/context";
 
 const ForgotPassword = () => {
   const { push } = router;
+  const { setPhoneNumber } = useFormContext();
+  const [phone, setPhone] = useState("");
   return (
     <AuthLayout
       title="Forgot password"
-      description="Forgot your password? Don't fret, because we got you covered. Input your email below to reset your password"
+      description="Forgot your password? Don't fret, because we got you covered. Input your mobile number below to reset your password"
     >
       <InputField
-        placeholder="Your email address"
-        inputMode="email"
-        keyboardType="email-address"
+        placeholder="Your mobile number"
+        inputMode="tel"
+        keyboardType="phone-pad"
       />
 
       <Button
@@ -35,7 +38,8 @@ const ForgotPassword = () => {
             params: {
               ...constructVerificationTypeObject(
                 VerificationTypes.forgotPassword,
-                ""
+                undefined,
+                phone
               )
             }
           });

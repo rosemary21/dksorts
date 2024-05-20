@@ -9,6 +9,8 @@ import MoniepointLogo from "./moniepoint-logo.png";
 import GettingStartedOneImage from "./getting-started-one.jpg";
 import DashboardBackground from "./dashboard-background.jpg";
 import WalletBackground from "./wallet-background.jpg";
+import GettingStartedTwoImage from "./getting-started-two.jpg";
+import GettingStartedThreeImage from "./getting-started-three.jpg";
 
 export {
   LoadingOne,
@@ -21,5 +23,7 @@ export {
   MoniepointLogo,
   GettingStartedOneImage,
   DashboardBackground,
-  WalletBackground
+  WalletBackground,
+  GettingStartedTwoImage,
+  GettingStartedThreeImage
 };

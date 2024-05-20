@@ -12,12 +12,17 @@ import { primaryColor, whiteColor } from "@/assets/colors";
 import { greeting } from "@/utils/functions";
 import { useNavigation } from "@react-navigation/native";
 import ProfileImage from "../screen/_general/ProfileImage";
+import useUser from "@/hooks/useUser";
+import LottieView from "lottie-react-native";
+import { BalanceLoader } from "@/assets/lotties";
+import { router } from "expo-router";
 
 const LoggedInHeader: React.FC<{
   headerText?: string;
   headerTextStyle?: TextStyle;
 }> = ({ headerText, headerTextStyle }) => {
-  const { navigate } = useNavigation();
+  const { push } = router;
+  const { userDetails } = useUser();
   return (
     <View
       style={{
@@ -37,28 +42,50 @@ const LoggedInHeader: React.FC<{
         {headerText || greeting()}
       </TextComponent>
 
-      <TouchableOpacity
-        onPress={() => {
-          navigate(ScreenNames.Account.path as never);
-        }}
-        style={{
-          flexDirection: "row",
-          alignItems: "center"
-        }}
-      >
+      {!userDetails ? (
         <View
           style={{
-            paddingVertical: 5,
-            backgroundColor: whiteColor.opacity50,
-            paddingHorizontal: 15,
-            borderTopLeftRadius: 100,
-            borderBottomLeftRadius: 100
+            width: 100,
+            height: 30,
+            alignItems: "center",
+            justifyContent: "center",
+            overflow: "hidden"
           }}
         >
-          <TextComponent>Duyil</TextComponent>
+          <LottieView
+            source={BalanceLoader}
+            autoPlay
+            loop
+            style={{
+              width: 250,
+              height: 250
+            }}
+          />
         </View>
-        <ProfileImage size={40} />
-      </TouchableOpacity>
+      ) : (
+        <TouchableOpacity
+          onPress={() => {
+            push(ScreenNames.Account.path);
+          }}
+          style={{
+            flexDirection: "row",
+            alignItems: "center"
+          }}
+        >
+          <View
+            style={{
+              paddingVertical: 5,
+              backgroundColor: whiteColor.opacity50,
+              paddingHorizontal: 15,
+              borderTopLeftRadius: 100,
+              borderBottomLeftRadius: 100
+            }}
+          >
+            <TextComponent>{userDetails.firstName}</TextComponent>
+          </View>
+          <ProfileImage size={40} />
+        </TouchableOpacity>
+      )}
     </View>
   );
 };

@@ -2,28 +2,57 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import ModalLayout from "@/components/_layouts/ModalLayout";
 import TextComponent from "@/components/_general/TextComponent";
-import { backspaceText } from "@/utils/functions";
+import { backspaceText, showToast } from "@/utils/functions";
 import {
   defaultIconProps,
+  generalError,
   padding,
   pinKeys,
+  ScreenNames,
   windowHeight,
   windowWidth
 } from "@/utils/_variables";
 import CustomButton from "@/components/_general/CustomButton";
-import { router } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import { blackColor, primaryColor } from "@/assets/colors";
+import { useFormContext } from "@/context";
+import useUser from "@/hooks/useUser";
+import { processRequest } from "@/api/functions";
+import { validatePinApi } from "@/api/url";
 
 const RequestPin = () => {
   const [pin, setPin] = useState("");
-  const { back } = router;
+  const { setPin: savePin } = useFormContext();
+  const { userDetails } = useUser();
+  const { back, push } = router;
 
   useEffect(() => {
     if (pin.length === 4) {
-      setPin("");
-      back();
+      processRequest(validatePinApi, { pin })
+        .then((res) => {
+          back();
+          savePin(pin);
+        })
+        .catch((err) => {
+          push({
+            pathname: ScreenNames.ErrorModal.path,
+            params: {
+              error: err?.response?.data?.resp?.message ?? err?.statusText
+            }
+          });
+          showToast(err?.statusText || generalError);
+        })
+        .finally(() => {
+          setPin("");
+        });
     }
   }, [pin]);
+
+  useEffect(() => {
+    if (!userDetails?.pinStatus) {
+      push(ScreenNames.CreatePin.path);
+    }
+  }, [userDetails]);
 
   return (
     <ModalLayout

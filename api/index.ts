@@ -12,13 +12,16 @@ const controller = new AbortController();
 
 const api = axios.create({
   baseURL,
-  timeout: 2000,
   signal: controller.signal
 });
 
-export const setHeaderAuthorization: (token: string) => void = (token) => {
+export const setHeaderAuthorization: (token?: string) => void = (token) => {
     if (token) {
       api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+      api.defaults.headers["apiKey"] = token;
+    } else {
+      api.defaults.headers.common["Authorization"] = undefined;
+      api.defaults.headers["apiKey"] = null;
     }
   },
   postData: (
@@ -35,15 +38,18 @@ export const setHeaderAuthorization: (token: string) => void = (token) => {
               type: status.success,
               code: res?.status,
               statusText: res?.statusText,
-              response: res?.data || null
+              response: (res?.data as never) ?? null
             });
           })
           .catch((err: AxiosError<ErrorResponseType, ErrorResponseType>) => {
-            // console.log(err);
             reject({
               type: status.error,
               code: err?.response?.status || err?.code,
-              statusText: err?.response?.data?.message || err?.message,
+              statusText:
+                err?.response?.data?.responseDto?.message ??
+                err?.response?.data?.error ??
+                err?.response?.data?.message ??
+                err?.message,
               response: err?.response?.data || null
             });
           });
@@ -69,14 +75,18 @@ export const setHeaderAuthorization: (token: string) => void = (token) => {
             type: status.success,
             code: res?.status,
             statusText: res?.statusText,
-            response: res?.data || null
+            response: (res?.data as never) ?? null
           });
         })
         .catch((err: AxiosError<ErrorResponseType, ErrorResponseType>) => {
           reject({
             type: status.error,
             code: err?.response?.status || err?.code,
-            statusText: err?.response?.data?.message || err?.message,
+            statusText:
+              err?.response?.data?.responseDto?.message ??
+              err?.response?.data?.error ??
+              err?.response?.data?.message ??
+              err?.message,
             response: err?.response?.data || null
           });
         });
@@ -96,14 +106,18 @@ export const setHeaderAuthorization: (token: string) => void = (token) => {
               type: status.success,
               code: res?.status,
               statusText: res?.statusText,
-              response: res?.data || null
+              response: (res?.data as never) ?? null
             });
           })
           .catch((err: AxiosError<ErrorResponseType, ErrorResponseType>) => {
             reject({
               type: status.error,
               code: err?.response?.status || err?.code,
-              statusText: err?.response?.data?.message || err?.message,
+              statusText:
+                err?.response?.data?.responseDto?.message ??
+                err?.response?.data?.error ??
+                err?.response?.data?.message ??
+                err?.message,
               response: err?.response?.data || null
             });
           });
@@ -129,14 +143,18 @@ export const setHeaderAuthorization: (token: string) => void = (token) => {
             type: status.success,
             code: res?.status,
             statusText: res?.statusText,
-            response: res?.data || null
+            response: (res?.data as never) ?? null
           });
         })
         .catch((err: AxiosError<ErrorResponseType, ErrorResponseType>) => {
           reject({
             type: status.error,
             code: err?.response?.status || err?.code,
-            statusText: err?.response?.data?.message || err?.message,
+            statusText:
+              err?.response?.data?.responseDto?.message ??
+              err?.response?.data?.error ??
+              err?.response?.data?.message ??
+              err?.message,
             response: err?.response?.data || null
           });
         });
