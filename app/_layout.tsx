@@ -8,7 +8,7 @@ import { RootSiblingParent } from "react-native-root-siblings";
 export default function GeneralLayout() {
   return (
     <RootSiblingParent>
-      <StatusBar style="dark" backgroundColor="transparent" />
+      <StatusBar style="light" backgroundColor="transparent" />
       <Providers>
         <AppContainer>
           <ScreenStacks />
