@@ -22,6 +22,7 @@ import { useFormContext } from "@/context";
 import { verifyNINApi } from "@/api/url";
 import { numberRegExp } from "@/utils/regex";
 import useUser from "@/hooks/useUser";
+import useToast from "@/hooks/useToast";
 
 const NINVerification = () => {
   const { push, back } = router;
@@ -33,6 +34,7 @@ const NINVerification = () => {
   const [loading, setLoading] = useState(false);
 
   const processNIN = useCallback(() => {
+    const { error } = useToast();
     const errors = validateValues(
       { nin },
       {
@@ -77,13 +79,11 @@ const NINVerification = () => {
           });
         })
         .catch((err) => {
-          push({
-            pathname: ScreenNames.ErrorModal.path,
-            params: {
-              error: err?.response?.data?.resp?.message ?? err?.statusText
-            }
-          });
-          showToast(err?.statusText || generalError);
+          error(
+            err?.response?.data?.resp?.message ??
+              err?.statusText ??
+              generalError
+          );
         })
         .finally(() => {
           setLoading(false);

@@ -27,6 +27,10 @@ export type UserType =
   | "RESET_USER_CONTEXT"
   | "SET_USER_TRANSACTIONS";
 
+export const SET_TOAST = "SET_TOAST";
+
+export type ToastType = "SET_TOAST";
+
 export const SET_USER_LOCATION = "SET_USER_LOCATION";
 
 export type NavigationType = "SET_USER_LOCATION";

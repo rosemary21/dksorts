@@ -15,6 +15,10 @@ import {
   initialValue as navigationInitialValue,
   reducer as navigationReducer
 } from "./navigationReducer";
+import {
+  initialValue as toastInitialValue,
+  reducer as toastReducer
+} from "./toastReducer";
 
 export {
   actionInitialValue,
@@ -24,5 +28,7 @@ export {
   userInitialValue,
   userReducer,
   navigationInitialValue,
-  navigationReducer
+  navigationReducer,
+  toastInitialValue,
+  toastReducer
 };

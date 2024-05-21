@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "Dkelucrative",
+    "name": "D'Keralutive",
     "slug": "dkelucrative",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -11,9 +11,7 @@
       "resizeMode": "cover",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true
     },
@@ -29,11 +27,7 @@
       "favicon": "./assets/favicon.png",
       "bundler": "metro"
     },
-    "plugins": [
-      "expo-font",
-      "expo-secure-store",
-      "expo-router"
-    ],
+    "plugins": ["expo-font", "expo-secure-store", "expo-router"],
     "extra": {
       "router": {
         "origin": false

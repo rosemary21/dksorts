@@ -166,6 +166,9 @@ export interface FormProviderTypes {
 export interface NavigationProviderTypes {
   children: React.ReactNode;
 }
+export interface ToastProviderTypes {
+  children: React.ReactNode;
+}
 export interface UserProviderTypes {
   children: React.ReactNode;
 }

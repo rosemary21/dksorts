@@ -17,10 +17,12 @@ import { saveUserToken } from "@/localServices/function";
 import { useUserContext } from "@/context";
 import { setHeaderAuthorization } from "@/api";
 import useUser from "@/hooks/useUser";
+import useToast from "@/hooks/useToast";
 
 const Login = () => {
   const { push } = router;
   const { makeUseWithToken } = useUser();
+  const { success, error } = useToast();
   const initialFormValue: LoginBodyType = {
     deviceId: deviceDetails.osInternalBuildId || deviceDetails.osBuildId || "",
     deviceName: deviceDetails.name || "",
@@ -64,7 +66,7 @@ const Login = () => {
 
           if (token) {
             makeUseWithToken(token, true);
-            showToast("Login successful");
+            success("Login successful");
           } else {
             push({
               pathname: ScreenNames.ErrorModal.path,
@@ -72,19 +74,17 @@ const Login = () => {
                 error: "Token not found"
               }
             });
-            showToast("An unknown error occurred when login in");
+            error("An unknown error occurred when login in");
           }
 
           // push(ScreenNames.Dashboard.path);
         })
         .catch((err) => {
-          push({
-            pathname: ScreenNames.ErrorModal.path,
-            params: {
-              error: err?.response?.data?.resp?.message ?? err?.statusText
-            }
-          });
-          showToast(err?.statusText || generalError);
+          error(
+            err?.response?.data?.resp?.message ??
+              err?.statusText ??
+              generalError
+          );
         })
         .finally(() => {
           setLoading(false);

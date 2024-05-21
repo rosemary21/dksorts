@@ -55,6 +55,10 @@ export const apiVersion = "/api/v1",
     method: requestType.post,
     url: "/billspayment/create"
   },
+  checkPhoneNumberApi: ApiURLType = {
+    method: requestType.post,
+    url: "/user/checkpassword"
+  },
   changePinApi: ApiURLType = {
     method: requestType.post,
     url: "/pin/changepin"

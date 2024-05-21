@@ -8,17 +8,20 @@ import {
   UserProvider
 } from "@/context";
 import { PaperProvider } from "react-native-paper";
+import { ToastProvider } from "@/context/ToastContext";
 
 const Providers: React.FC<ProviderType> = ({ children }) => {
   return (
     <PaperProvider>
-      <FormProvider>
-        <ActionProvider>
-          <UserProvider>
-            <NavigationProvider>{children}</NavigationProvider>
-          </UserProvider>
-        </ActionProvider>
-      </FormProvider>
+      <ToastProvider>
+        <FormProvider>
+          <ActionProvider>
+            <UserProvider>
+              <NavigationProvider>{children}</NavigationProvider>
+            </UserProvider>
+          </ActionProvider>
+        </FormProvider>
+      </ToastProvider>
     </PaperProvider>
   );
 };

@@ -16,6 +16,7 @@ import { showToast, validateValues } from "@/utils/functions";
 import { passwordRegExp } from "@/utils/regex";
 import { processRequest } from "@/api/functions";
 import { resetPasswordApi } from "@/api/url";
+import useToast from "@/hooks/useToast";
 
 const ChangePassword = () => {
   const { push, back } = router;
@@ -32,6 +33,7 @@ const ChangePassword = () => {
     useState(initialValue);
 
   const processForm = useCallback(() => {
+    const { error } = useToast();
     const errors = validateValues(resetPasswordForm, {
       newPassword: {
         required: {
@@ -83,13 +85,11 @@ const ChangePassword = () => {
             });
           })
           .catch((err) => {
-            push({
-              pathname: ScreenNames.ErrorModal.path,
-              params: {
-                error: err?.response?.data?.resp?.message ?? err?.statusText
-              }
-            });
-            showToast(err?.statusText || generalError);
+            error(
+              err?.response?.data?.resp?.message ??
+                err?.statusText ??
+                generalError
+            );
           })
           .finally(() => {
             setLoading(false);

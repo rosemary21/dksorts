@@ -32,6 +32,7 @@ import { signupApi } from "@/api/url";
 import DatePicker from "react-native-modern-datepicker";
 import moment from "moment";
 import useUser from "@/hooks/useUser";
+import useToast from "@/hooks/useToast";
 
 const SignUp = () => {
   const { push } = router;
@@ -59,6 +60,7 @@ const SignUp = () => {
   const [loading, setLoading] = useState(false);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [openDate, setOpenDate] = useState(false);
+  const { error } = useToast();
   const processForm = useCallback(() => {
     const errors = validateValues(registerForm, {
       firstName: {
@@ -158,23 +160,15 @@ const SignUp = () => {
                 }
               });
             } else {
-              push({
-                pathname: ScreenNames.ErrorModal.path,
-                params: {
-                  error: "Token not found"
-                }
-              });
-              showToast("An unknown error occurred when login in");
+              error("Token not found");
             }
           })
           .catch((err) => {
-            push({
-              pathname: ScreenNames.ErrorModal.path,
-              params: {
-                error: err?.response?.data?.resp?.message ?? err?.statusText
-              }
-            });
-            showToast(err?.statusText || generalError);
+            error(
+              err?.response?.data?.resp?.message ??
+                err?.statusText ??
+                generalError
+            );
           })
           .finally(() => {
             setLoading(false);

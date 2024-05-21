@@ -9,7 +9,6 @@
     "web": "expo start --web"
   },
   "dependencies": {
-    "@react-native-clipboard/clipboard": "^1.14.1",
     "@types/react": "~18.2.45",
     "axios": "^1.6.8",
     "date-fns": "^3.6.0",

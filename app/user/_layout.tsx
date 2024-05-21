@@ -71,7 +71,7 @@ export default function GeneralLayout() {
 
   return (
     <>
-      <StatusBar style="dark" backgroundColor={whiteColor.default} />
+      <StatusBar style="dark" />
       <Stack
         screenOptions={{
           headerShown: false,

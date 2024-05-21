@@ -1,5 +1,11 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import React, { useCallback, useState } from "react";
+import {
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View
+} from "react-native";
+import React, { useCallback, useRef, useState } from "react";
 import { router, useLocalSearchParams } from "expo-router";
 import AuthLayout from "@/components/_layouts/AuthLayout";
 import InputField from "@/components/_general/form/InputField";
@@ -22,6 +28,7 @@ import LottieView from "lottie-react-native";
 import { BalanceLoader } from "@/assets/lotties";
 import useUser from "@/hooks/useUser";
 import { numberRegExp } from "@/utils/regex";
+import useToast from "@/hooks/useToast";
 
 const OTPVerification = () => {
   const {
@@ -42,6 +49,8 @@ const OTPVerification = () => {
   const [phoneCode, setPhoneCode] = useState("");
   const [codeSending, setCodeSending] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [codeType, setCodeType] = useState<"phone" | "email" | null>();
+  const { error } = useToast();
   const { push, back } = router;
   const initialValue: RequestOTPBodyType = {
     otpId: "",
@@ -50,6 +59,23 @@ const OTPVerification = () => {
     sendSource: ""
   };
   let pathname = ScreenNames.Login.path;
+  const emailRef = useRef<TextInput>(null);
+  const phoneRef = useRef<TextInput>(null);
+
+  const focusOnEmail = () => {
+    const input = emailRef.current;
+
+    if (input) {
+      input?.focus;
+    }
+  };
+  const focusOnPhone = () => {
+    const input = phoneRef.current;
+
+    if (input) {
+      input?.focus;
+    }
+  };
 
   switch (verificationType) {
     case VerificationTypes.forgotPassword:
@@ -77,31 +103,33 @@ const OTPVerification = () => {
       otpId: (type === "phone" ? phone : email) as string,
       sendSource: (type === "phone" ? phone : email) as string
     };
-    setCodeSending(true);
+    setCodeType(type);
     processRequest(sendOTPApi, data)
       .then((res) => {
         if (type === "phone") {
           setPhoneCodeSent(true);
+          setTimeout(() => {
+            focusOnPhone();
+          }, 500);
         } else {
           setEmailCodeSent(true);
+          setTimeout(() => {
+            focusOnEmail();
+          }, 500);
         }
       })
       .catch((err) => {
-        push({
-          pathname: ScreenNames.ErrorModal.path,
-          params: {
-            error: err?.response?.data?.resp?.message ?? err?.statusText
-          }
-        });
-        showToast(err?.statusText || generalError);
+        error(
+          err?.response?.data?.resp?.message ?? err?.statusText ?? generalError
+        );
       })
       .finally(() => {
-        setCodeSending(false);
+        setCodeType(null);
       });
   };
 
   const authenticateCode = (type: "phone" | "email") => {
-    setCodeSending(true);
+    setCodeType(type);
     processRequest(verifyOTPApi, {
       otp: type === "phone" ? phoneCode : emailCode,
       otpId: (type === "phone" ? phone : email) as string
@@ -114,16 +142,17 @@ const OTPVerification = () => {
         }
       })
       .catch((err) => {
-        push({
-          pathname: ScreenNames.ErrorModal.path,
-          params: {
-            error: err?.response?.data?.resp?.message ?? err?.statusText
-          }
-        });
-        showToast(err?.statusText || generalError);
+        if (type === "phone") {
+          setPhoneCode("");
+        } else {
+          setEmailCode("");
+        }
+        error(
+          err?.response?.data?.resp?.message ?? err?.statusText ?? generalError
+        );
       })
       .finally(() => {
-        setCodeSending(false);
+        setCodeType(null);
       });
   };
   const processOTP = useCallback(async () => {
@@ -152,21 +181,15 @@ const OTPVerification = () => {
             }
           });
         }
-      } catch (error: any) {
+      } catch (erro: any) {
         setLoading(false);
         let err = "";
 
-        if (error?.statusText || error?.response?.data) {
-          err = error?.response?.data?.resp?.message ?? error?.statusText;
+        if (erro?.statusText || erro?.response?.data) {
+          err = erro?.response?.data?.resp?.message ?? erro?.statusText;
         }
 
-        push({
-          pathname: ScreenNames.ErrorModal.path,
-          params: {
-            error: err
-          }
-        });
-        showToast(err || generalError);
+        error(err ?? generalError);
       }
     } else {
       let otp = "";
@@ -194,10 +217,16 @@ const OTPVerification = () => {
     >
       {!hideEmail && (
         <InputField
-          editable={emailCodeSent || emailCodeVerified ? false : true}
+          value={emailCode}
+          ref={emailRef}
+          editable={!emailCodeSent || emailCodeVerified ? false : true}
           onChangeText={(code) => {
-            if (numberRegExp.test(code) && code.length < 5) {
+            if (code.length > 0 && numberRegExp.test(code) && code.length < 7) {
               setEmailCode(code);
+            }
+
+            if (code.length < 1) {
+              setEmailCode("");
             }
           }}
           label={`Email (${email})`}
@@ -206,10 +235,10 @@ const OTPVerification = () => {
           placeholder={emailCodeSent ? "Input OTP" : "Click send code"}
           rightIcon={
             !emailCodeVerified ? (
-              !codeSending ? (
+              codeType !== "email" ? (
                 <TouchableOpacity
                   onPress={() => {
-                    if (!codeSending && !emailCodeVerified) {
+                    if (!codeType && !emailCodeVerified) {
                       if (!emailCodeSent) {
                         sendCode("email");
                       } else {
@@ -232,7 +261,7 @@ const OTPVerification = () => {
                     {emailCodeSent
                       ? emailCode.length > 0
                         ? "Verify Code"
-                        : "Resend Code (30s)"
+                        : "Resend code"
                       : "Send Code"}
                   </TextComponent>
                 </TouchableOpacity>
@@ -265,10 +294,14 @@ const OTPVerification = () => {
       )}
       {(verificationType === VerificationTypes.registration || phone) && (
         <InputField
-          editable={phoneCodeSent || phoneCodeVerified}
+          ref={phoneRef}
+          editable={!phoneCodeSent || phoneCodeVerified ? false : true}
           onChangeText={(code) => {
-            if (numberRegExp.test(code) && code.length < 5) {
+            if (code.length > 0 && numberRegExp.test(code) && code.length < 7) {
               setPhoneCode(code);
+            }
+            if (code.length < 1) {
+              setEmailCode("");
             }
           }}
           label={`Phone (${phone})`}
@@ -278,10 +311,10 @@ const OTPVerification = () => {
           placeholder={phoneCodeSent ? "Input OTP" : "Click send code"}
           rightIcon={
             !phoneCodeVerified ? (
-              !codeSending ? (
+              codeType !== "phone" ? (
                 <TouchableOpacity
                   onPress={() => {
-                    if (!codeSending && !phoneCodeVerified) {
+                    if (!codeType && !phoneCodeVerified) {
                       if (!emailCodeSent) {
                         sendCode("phone");
                       } else {
@@ -304,7 +337,7 @@ const OTPVerification = () => {
                     {phoneCodeSent
                       ? phoneCode.length > 0
                         ? "Verify Code"
-                        : "Resend Code (30s)"
+                        : "Resend code"
                       : "Send Code"}
                   </TextComponent>
                 </TouchableOpacity>

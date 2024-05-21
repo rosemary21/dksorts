@@ -8,6 +8,7 @@ import * as SplashScreen from "expo-splash-screen";
 import { useActionContext, useUserContext } from "@/context";
 import { getUserToken } from "@/localServices/function";
 import useUser from "@/hooks/useUser";
+import Toast from "../_general/Toast";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -68,6 +69,7 @@ const AppContainer: React.FC<{ children: React.ReactNode }> = ({
     appLoaded && (
       <GestureHandlerRootView style={{ flex: 1 }}>
         {children}
+        <Toast />
       </GestureHandlerRootView>
     )
   );
