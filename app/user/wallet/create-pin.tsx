@@ -112,6 +112,7 @@ const CreatePin = () => {
       if (pin !== repeatPin) {
         startShake();
         setPin("");
+        Vibrate("short");
       } else {
         processForm();
       }

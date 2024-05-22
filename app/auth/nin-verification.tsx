@@ -50,6 +50,10 @@ const NINVerification = () => {
           minLength: {
             value: 11,
             message: "Please input a valid NIN"
+          },
+          maxLength: {
+            value: 11,
+            message: "Please input a valid NIN"
           }
         }
       }

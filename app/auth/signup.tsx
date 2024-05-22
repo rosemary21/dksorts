@@ -58,6 +58,7 @@ const SignUp = () => {
   const [registerFormErr, setRegisterFormErr] = useState(initialValue);
   const { makeUseWithToken } = useUser();
   const [loading, setLoading] = useState(false);
+  const { show } = useToast();
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [openDate, setOpenDate] = useState(false);
   const { error } = useToast();
@@ -133,6 +134,7 @@ const SignUp = () => {
         ...prevState,
         ...errors
       }));
+      show("Please correct the wrong information and click on sign up again");
     } else {
       const { password, confirmPassword } = registerForm;
       if (password !== confirmPassword) {
@@ -154,8 +156,8 @@ const SignUp = () => {
                 params: {
                   ...constructVerificationTypeObject(
                     VerificationTypes.registration,
-                    "",
-                    ""
+                    registerForm.email,
+                    registerForm.phoneNumber
                   )
                 }
               });
@@ -202,7 +204,7 @@ const SignUp = () => {
           onChangeText={(firstName) => {
             setRegisterForm((prevState) => ({
               ...prevState,
-              firstName
+              firstName: firstName.trim()
             }));
 
             setRegisterFormErr((prevState) => ({
@@ -218,7 +220,7 @@ const SignUp = () => {
           onChangeText={(lastName) => {
             setRegisterForm((prevState) => ({
               ...prevState,
-              lastName
+              lastName: lastName.trim()
             }));
 
             setRegisterFormErr((prevState) => ({

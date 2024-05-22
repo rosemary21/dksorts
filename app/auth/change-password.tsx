@@ -31,9 +31,9 @@ const ChangePassword = () => {
   const [loading, setLoading] = useState(false);
   const [resetPasswordFormErr, setResetPasswordFormErr] =
     useState(initialValue);
+  const { error } = useToast();
 
   const processForm = useCallback(() => {
-    const { error } = useToast();
     const errors = validateValues(resetPasswordForm, {
       newPassword: {
         required: {

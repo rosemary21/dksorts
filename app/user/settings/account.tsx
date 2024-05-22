@@ -101,7 +101,7 @@ const ProfileInformation = () => {
         onChangeText={(firstName) => {
           setChangeProfileForm((prevState) => ({
             ...prevState,
-            firstName
+            firstName: firstName.trim()
           }));
           setChangeProfileFormErr((prevState) => ({
             ...prevState,
@@ -117,7 +117,7 @@ const ProfileInformation = () => {
         onChangeText={(lastName) => {
           setChangeProfileForm((prevState) => ({
             ...prevState,
-            lastName
+            lastName: lastName.trim()
           }));
           setChangeProfileFormErr((prevState) => ({
             ...prevState,

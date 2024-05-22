@@ -122,18 +122,21 @@ const LoggedInContainer: React.FC<{
   }, [pathname]);
 
   const backAction = useCallback(() => {
-    if (clickedBackOnce) {
-      BackHandler.exitApp();
+    if (activeScreen && activeScreen?.showIn.includes(nav)) {
+      if (clickedBackOnce) {
+        BackHandler.exitApp();
+      } else {
+        setClickedBAckOnce(true);
+        setTimeout(() => {
+          setClickedBAckOnce(false);
+        }, 3000);
+        show("Go back again to exist");
+      }
+      return true;
     } else {
-      setClickedBAckOnce(true);
-      setTimeout(() => {
-        setClickedBAckOnce(false);
-      }, 3000);
-      show("Go back again to exist");
+      return false;
     }
-
-    return true;
-  }, [clickedBackOnce]);
+  }, [clickedBackOnce, activeScreen]);
 
   useEffect(() => {
     const backHandler = BackHandler.addEventListener(
@@ -142,7 +145,7 @@ const LoggedInContainer: React.FC<{
     );
 
     return () => backHandler.remove();
-  }, [clickedBackOnce]);
+  }, [clickedBackOnce, activeScreen]);
   return (
     <Container
       safeView={!unSafeView}

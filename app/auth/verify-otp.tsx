@@ -44,7 +44,7 @@ const OTPVerification = () => {
     shouldGoBack,
     nextScreenName
   } = useLocalSearchParams();
-  const { fetchUserDetails } = useUser();
+  const { fetchUserDetails, userDetails } = useUser();
   const { setOTP } = useFormContext();
   const [emailCodeSent, setEmailCodeSent] = useState(false);
   const [emailCodeVerified, setEmailCodeVerified] = useState(false);
@@ -56,6 +56,7 @@ const OTPVerification = () => {
   const [loading, setLoading] = useState(false);
   const [codeType, setCodeType] = useState<"phone" | "email" | null>();
   const { error, show } = useToast();
+
   const { push, back } = router;
   const initialValue: RequestOTPBodyType = {
     otpId: "",
@@ -175,20 +176,30 @@ const OTPVerification = () => {
     if (verificationType === VerificationTypes.registration) {
       try {
         setLoading(true);
-        const verifyEmail = processRequest(verifyEmailApi, {
-          emailAddress: email as string,
-          otp: emailCode,
-          phoneNumber: phone as string
-        });
+        const verifyEmail = email
+          ? processRequest(verifyEmailApi, {
+              emailAddress: email as string,
+              otp: emailCode,
+              phoneNumber: (phone ?? userDetails?.phoneNumber) as string
+            })
+          : undefined;
+
+        console.log(verifyEmail);
         const verifyPhone = processRequest(verifyPhoneNumberApi, {
-          emailAddress: email as string,
+          emailAddress: (email ?? userDetails?.email) as string,
           otp: phoneCode,
           phoneNumber: phone as string
         });
 
-        const promises = await Promise.all([verifyEmail, verifyPhone]);
-
-        if (promises) {
+        const [verifiedEmail, verifiedPhoneNumber] = await Promise.all(
+          [verifyEmail, verifyPhone].filter((promise) => promise)
+        );
+        console.log(verifiedEmail, verifiedPhoneNumber);
+        if (
+          (phone && email && verifiedEmail && verifiedPhoneNumber) ||
+          (phone && verifiedEmail) ||
+          (email && verifiedEmail)
+        ) {
           fetchUserDetails(() => {
             back();
 
@@ -229,6 +240,7 @@ const OTPVerification = () => {
     emailCode,
     verificationType,
     shouldGoBack,
+    userDetails,
     setOTP
   ]);
   return (

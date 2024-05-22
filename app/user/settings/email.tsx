@@ -22,12 +22,15 @@ import { processRequest } from "@/api/functions";
 import { changeEmailApi } from "@/api/url";
 import { useFormContext } from "@/context";
 import useUser from "@/hooks/useUser";
+import useToast from "@/hooks/useToast";
 
 const ChangeEmail = () => {
   const { push, back } = router;
   const { otp, setOTP } = useFormContext();
   const pathname = usePathname();
   const [email, setEmail] = useState("");
+  const { logoutUser } = useUser();
+  const { show } = useToast();
   const { userDetails, fetchUserDetails } = useUser();
   const [emailErr, setEmailErr] = useState("");
   const [loading, setLoading] = useState(false);
@@ -58,16 +61,8 @@ const ChangeEmail = () => {
           otp
         })
           .then(() => {
-            fetchUserDetails(() => {
-              back();
-              push({
-                pathname: ScreenNames.VerificationResponse.path,
-                params: {
-                  description: "Email added successfully",
-                  type: VerificationResponseType.success
-                }
-              });
-            });
+            logoutUser();
+            show("Please login again");
           })
           .catch((err) => {
             push({
@@ -88,7 +83,7 @@ const ChangeEmail = () => {
           params: {
             ...constructVerificationTypeObject(
               VerificationTypes.changeEmail,
-              userDetails?.email
+              email
             ),
             shouldGoBack: "true"
           }

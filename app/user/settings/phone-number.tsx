@@ -19,9 +19,10 @@ import {
 } from "@/utils/functions";
 import { useFormContext } from "@/context";
 import useUser from "@/hooks/useUser";
-import { phoneNumberRegExp2 } from "@/utils/regex";
+import { numberRegExp, phoneNumberRegExp2 } from "@/utils/regex";
 import { changePhoneNumberApi } from "@/api/url";
 import { processRequest } from "@/api/functions";
+import useToast from "@/hooks/useToast";
 
 const ChangePhoneNumber = () => {
   const { push, back } = router;
@@ -29,6 +30,8 @@ const ChangePhoneNumber = () => {
   const pathname = usePathname();
   const [phoneNumber, setPhoneNumber] = useState("");
   const { userDetails, fetchUserDetails } = useUser();
+  const { logoutUser } = useUser();
+  const { show } = useToast();
   const [phoneNumberErr, setPhoneNumberErr] = useState("");
   const [loading, setLoading] = useState(false);
   const processForm = useCallback(() => {
@@ -43,6 +46,14 @@ const ChangePhoneNumber = () => {
           regex: {
             value: phoneNumberRegExp2,
             message: "Please input a valid mobile number"
+          },
+          minLength: {
+            value: 11,
+            message: "Please input a valid mobile number"
+          },
+          maxLength: {
+            value: 11,
+            message: "Please input a valid mobile number"
           }
         }
       }
@@ -52,22 +63,18 @@ const ChangePhoneNumber = () => {
       setPhoneNumberErr(errors?.phoneNumber);
     } else {
       if (otp) {
+        console.log({
+          phoneNumber,
+          otp
+        });
         setLoading(true);
         processRequest(changePhoneNumberApi, {
-          phoneNumber: phoneNumber,
+          phoneNumber,
           otp
         })
           .then(() => {
-            fetchUserDetails(() => {
-              back();
-              push({
-                pathname: ScreenNames.VerificationResponse.path,
-                params: {
-                  description: "Phone number updated successfully",
-                  type: VerificationResponseType.success
-                }
-              });
-            });
+            logoutUser();
+            show("Please login again with your new phone number to continue");
           })
           .catch((err) => {
             push({
@@ -89,7 +96,7 @@ const ChangePhoneNumber = () => {
             ...constructVerificationTypeObject(
               VerificationTypes.changePhoneNumber,
               undefined,
-              userDetails?.phoneNumber
+              phoneNumber
             ),
             shouldGoBack: "true"
           }
@@ -114,12 +121,12 @@ const ChangePhoneNumber = () => {
         value={phoneNumber}
         error={phoneNumberErr}
         onChangeText={(phoneNumber) => {
-          if (phoneNumberRegExp2.test(phoneNumber) && phoneNumber.length < 12) {
+          if (numberRegExp.test(phoneNumber) && phoneNumber.length < 12) {
             setPhoneNumber(phoneNumber);
           }
           setPhoneNumberErr("");
 
-          if (phoneNumberErr.length < 1) {
+          if (phoneNumber.length < 1) {
             setPhoneNumber("");
           }
         }}
