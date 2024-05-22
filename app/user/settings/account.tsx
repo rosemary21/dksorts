@@ -63,15 +63,16 @@ const ProfileInformation = () => {
       setLoading(true);
       processRequest(changeProfileApi, changeProfileForm)
         .then((res) => {
-          back();
-          push({
-            pathname: ScreenNames.VerificationResponse.path,
-            params: {
-              description: "Profile details updated successfully",
-              type: VerificationResponseType.success
-            }
+          fetchUserDetails(() => {
+            back();
+            push({
+              pathname: ScreenNames.VerificationResponse.path,
+              params: {
+                description: "Profile details updated successfully",
+                type: VerificationResponseType.success
+              }
+            });
           });
-          fetchUserDetails();
         })
         .catch((err) => {
           push({

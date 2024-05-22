@@ -77,7 +77,7 @@ const ChangePassword = () => {
             push({
               pathname: ScreenNames.VerificationResponse.path,
               params: {
-                description: "Profile details updated successfully",
+                description: "Password updated successfully",
                 type: VerificationResponseType.success
               }
             });

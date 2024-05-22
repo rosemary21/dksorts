@@ -25,10 +25,10 @@ import useUser from "@/hooks/useUser";
 
 const ChangeEmail = () => {
   const { push, back } = router;
-  const { otp } = useFormContext();
+  const { otp, setOTP } = useFormContext();
   const pathname = usePathname();
   const [email, setEmail] = useState("");
-  const { userDetails } = useUser();
+  const { userDetails, fetchUserDetails } = useUser();
   const [emailErr, setEmailErr] = useState("");
   const [loading, setLoading] = useState(false);
   const processForm = useCallback(() => {
@@ -58,13 +58,15 @@ const ChangeEmail = () => {
           otp
         })
           .then(() => {
-            back();
-            push({
-              pathname: ScreenNames.VerificationResponse.path,
-              params: {
-                description: "Email added successfully",
-                type: VerificationResponseType.success
-              }
+            fetchUserDetails(() => {
+              back();
+              push({
+                pathname: ScreenNames.VerificationResponse.path,
+                params: {
+                  description: "Email added successfully",
+                  type: VerificationResponseType.success
+                }
+              });
             });
           })
           .catch((err) => {
@@ -77,6 +79,7 @@ const ChangeEmail = () => {
             showToast(err?.statusText || generalError);
           })
           .finally(() => {
+            setOTP("");
             setLoading(false);
           });
       } else {
@@ -109,7 +112,10 @@ const ChangeEmail = () => {
       <InputField
         value={email}
         error={emailErr}
-        onChangeText={setEmail}
+        onChangeText={(email) => {
+          setEmail(email);
+          setEmailErr("");
+        }}
         label="Email"
         keyboardType="email-address"
         inputMode="email"

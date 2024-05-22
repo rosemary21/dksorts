@@ -72,16 +72,6 @@ export const validateValues: <T>(
       const validationValue = validation[key];
 
       if (validationValue) {
-        console.log(
-          validationValue.maxLength &&
-            !isNaN(Number(validationValue.maxLength)) &&
-            value.toString().length < validationValue.maxLength
-        );
-        console.log(
-          validationValue?.maxLength?.value &&
-            !isNaN(Number(validationValue?.maxLength?.value)) &&
-            value.toString().length < validationValue?.maxLength?.value
-        );
         if (
           typeof validationValue !== "object" &&
           (!value || value.length < 1)

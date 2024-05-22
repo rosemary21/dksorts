@@ -10,7 +10,7 @@ const Loader = () => {
     <View
       style={{
         height: windowHeight - 250,
-        width: windowWidth,
+        width: "100%",
         flex: 1,
         alignItems: "center",
         justifyContent: "center",

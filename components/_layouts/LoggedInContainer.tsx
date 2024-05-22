@@ -1,4 +1,7 @@
 import {
+  BackHandler,
+  GestureResponderEvent,
+  RefreshControl,
   StyleSheet,
   Text,
   TextStyle,
@@ -6,7 +9,7 @@ import {
   View,
   ViewStyle
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Container from "./Container";
 import ScrollComponent from "../_general/ScrollComponent";
 import Nav from "../_general/nav/Nav";
@@ -14,15 +17,18 @@ import {
   allScreenNames,
   defaultIconProps,
   nav,
-  padding
+  padding,
+  ScreenNames
 } from "@/utils/_variables";
 import { ArrowLeft2 } from "iconsax-react-native";
-import { secondaryColor, whiteColor } from "@/assets/colors";
+import { primaryColor, secondaryColor, whiteColor } from "@/assets/colors";
 import TextComponent from "../_general/TextComponent";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { ScreenNamesType } from "@/utils/types";
 import LoggedInHeader from "../_general/LoggedInHeader";
 import { usePathname, useRouter } from "expo-router";
+import useToast from "@/hooks/useToast";
+import useUser from "@/hooks/useUser";
 
 const Header: React.FC<{
   headerText: string;
@@ -43,7 +49,7 @@ const Header: React.FC<{
     >
       {!hideBackArrow && (
         <TouchableOpacity onPress={goBack}>
-          <ArrowLeft2 {...defaultIconProps} size={20} />
+          <ArrowLeft2 {...defaultIconProps} size={30} />
         </TouchableOpacity>
       )}
 
@@ -91,7 +97,22 @@ const LoggedInContainer: React.FC<{
   const [activeScreen, setActiveScreen] = useState<ScreenNamesType | null>(
       null
     ),
-    pathname = usePathname();
+    pathname = usePathname(),
+    allowRefreshControl =
+      pathname === ScreenNames.Dashboard.path ||
+      pathname === ScreenNames.Wallet.path ||
+      pathname === ScreenNames.Account.path,
+    { show } = useToast(),
+    [clickedBackOnce, setClickedBAckOnce] = useState(false),
+    [refreshing, setRefreshing] = React.useState(false),
+    { fetchUserDetails } = useUser();
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    fetchUserDetails(() => {
+      setRefreshing(false);
+    });
+  }, []);
 
   useEffect(() => {
     if (pathname) {
@@ -99,6 +120,29 @@ const LoggedInContainer: React.FC<{
       setActiveScreen(screen || null);
     }
   }, [pathname]);
+
+  const backAction = useCallback(() => {
+    if (clickedBackOnce) {
+      BackHandler.exitApp();
+    } else {
+      setClickedBAckOnce(true);
+      setTimeout(() => {
+        setClickedBAckOnce(false);
+      }, 3000);
+      show("Go back again to exist");
+    }
+
+    return true;
+  }, [clickedBackOnce]);
+
+  useEffect(() => {
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      backAction
+    );
+
+    return () => backHandler.remove();
+  }, [clickedBackOnce]);
   return (
     <Container
       safeView={!unSafeView}
@@ -153,6 +197,15 @@ const LoggedInContainer: React.FC<{
               </View>
             ) : (
               <ScrollComponent
+                refreshControl={
+                  allowRefreshControl ? (
+                    <RefreshControl
+                      colors={[primaryColor.default]}
+                      refreshing={refreshing}
+                      onRefresh={onRefresh}
+                    />
+                  ) : undefined
+                }
                 style={{
                   minHeight: 0,
                   ...styles.contentContainerStyle,

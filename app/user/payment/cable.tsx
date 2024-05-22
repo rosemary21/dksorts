@@ -105,13 +105,11 @@ const CablePayment = () => {
           amount: Number(cablePaymentForm.amount),
           pin
         };
-        console.log(data);
         setLoading(true);
 
         processRequest(createBillApi, data)
           .then((res) => {
             const response = res.response as PaymentSuccessfulResponseType;
-            console.log(res);
             setCablePaymentForm(initialValue);
             back();
             push({
@@ -124,7 +122,6 @@ const CablePayment = () => {
             fetchUserDetails();
           })
           .catch((err) => {
-            console.log(err);
             push({
               pathname: ScreenNames.ErrorModal.path,
               params: {

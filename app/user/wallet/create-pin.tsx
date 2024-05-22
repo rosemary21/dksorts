@@ -26,6 +26,8 @@ import Animated, {
   interpolate,
   useAnimatedStyle,
   useSharedValue,
+  withRepeat,
+  withSequence,
   withSpring,
   withTiming
 } from "react-native-reanimated";
@@ -47,7 +49,7 @@ const CreatePin = () => {
     setLoading(true);
     processRequest(setPinApi, { pin })
       .then((res) => {
-        fetchUserDetails(()=>{
+        fetchUserDetails(() => {
           back();
           push({
             pathname: ScreenNames.VerificationResponse.path,
@@ -56,7 +58,6 @@ const CreatePin = () => {
               type: VerificationResponseType.success
             }
           });
-
         });
       })
       .catch((err) => {
@@ -73,39 +74,34 @@ const CreatePin = () => {
       });
   }, [pin, userDetails]);
 
-  const shakeValue = useSharedValue(0);
-  const startShake = () => {
-    Vibrate("short");
-    shakeValue.value = 0;
+  const shakeAnimation = useSharedValue(0);
 
-    shakeValue.value = withTiming(
-      1,
-      { duration: 200, easing: Easing.linear },
-      () => {
-        shakeValue.value = withSpring(0, { damping: 2, stiffness: 10 }, () => {
-          shakeValue.value = 0;
-        });
-      }
-    );
-  };
-
-  const animatedStyle = useAnimatedStyle(() => {
-    const shakeTranslateX = interpolate(
-      shakeValue.value,
-      [0, 0.2, 0.4, 0.6, 0.8, 1],
-      [0, -10, 10, -10, 10, 0],
-      Extrapolate.CLAMP
-    );
-
+  const shakeStyle = useAnimatedStyle(() => {
     return {
-      transform: [{ translateX: shakeTranslateX }]
+      transform: [
+        {
+          translateX: shakeAnimation.value
+        }
+      ]
     };
   });
 
-  useFocusEffect(() => {
-    shakeValue.value = 0;
-  });
-
+  const startShake = () => {
+    shakeAnimation.value = withSequence(
+      withRepeat(
+        withTiming(15, {
+          duration: 100,
+          easing: Easing.linear
+        }),
+        6,
+        true
+      ),
+      withTiming(0, {
+        duration: 100,
+        easing: Easing.linear
+      })
+    );
+  };
   useEffect(() => {
     if (pin.length === 4 && (!repeatPin || repeatPin.length !== 4)) {
       setRepeatPin(pin);
@@ -154,7 +150,7 @@ const CreatePin = () => {
               justifyContent: "center",
               gap: windowWidth * 0.08
             },
-            animatedStyle
+            shakeStyle
           ]}
         >
           <TextComponent

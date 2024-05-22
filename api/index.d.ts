@@ -79,7 +79,7 @@ export interface UserDetailsType {
   walletAccount: string;
   emailVerificationStatus: boolean;
   phoneNumberStatus: boolean;
-  isAccountNonLocked: boolean;
+  accountNonLocked: boolean;
   pinStatus: boolean;
   accountName: string;
   bankName: string;
@@ -119,6 +119,10 @@ export interface ChangeProfileDetailsBodyType {
 export interface ChangePinBodyType {
   newPin: string;
   oldPin: string;
+}
+export interface ResetPinBodyType {
+  newPin: string;
+  otp: string;
 }
 export interface ChangePasswordBodyType {
   confirmPassword: string;
@@ -161,6 +165,43 @@ export interface PaymentSuccessfulResponseType {
     recharge_token: string | null;
     fee: string;
   };
+}
+
+export interface BVNDataType {
+  title: string;
+  bvn: string;
+  firstName: string;
+  middleName: string;
+  lastName: string;
+  dateOfBirth: string;
+  phoneNumber: string;
+  enrollmentBank: string | null;
+  enrollmentBranch: string | null;
+  address: string | null;
+  gender: string;
+  email: string;
+  watchListed: string | null;
+  nationality: string;
+  lgaOfOrigin: string;
+  maritalStatus: string;
+  nameOnCard: string;
+  base64Image: string;
+  stateOfResidence: string;
+  registrationDate: string;
+}
+
+export interface GetBVNResponseType {
+  data: {
+    status: string;
+    message: string;
+    resp: {
+      code: string;
+      message: string;
+    };
+
+    data: BVNDataType;
+  };
+  status: null;
 }
 
 export interface ChangeEmailBodyType {
@@ -268,7 +309,8 @@ export type AllBodyType =
   | VerifyPhoneEmailBodyType
   | VerifyNINBodyType
   | ChangeEmailBodyType
-  | ChangePhoneNumberBodyType;
+  | ChangePhoneNumberBodyType
+  | ResetPinBodyType;
 
 export type AllResponseType = ErrorResponseType &
   AllBodyType &
@@ -276,7 +318,8 @@ export type AllResponseType = ErrorResponseType &
   GetUserDetailsResponseType &
   FetchBillerResponseType &
   FetchBillerOptionResponseType &
-  PaymentSuccessfulResponseType;
+  PaymentSuccessfulResponseType &
+  GetBVNResponseType;
 
 export type AllRequestType = "post" | "get" | "delete" | "put";
 

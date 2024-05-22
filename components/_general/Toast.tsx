@@ -29,7 +29,7 @@ const Toast = () => {
     translateY.value = withTiming(100, { duration: 0 });
     setTimeout(() => {
       setToast();
-    }, 500);
+    }, 300);
   }, []);
 
   useEffect(() => {
@@ -56,7 +56,7 @@ const Toast = () => {
       translateY.value = withTiming(100, { duration: 0 });
       setTimeout(() => {
         translateY.value = withTiming(0, { duration: 300 });
-      }, 100);
+      }, 50);
     }
   }, [message]);
 

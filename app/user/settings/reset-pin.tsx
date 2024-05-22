@@ -19,54 +19,52 @@ import {
 } from "@/utils/functions";
 import { useFormContext } from "@/context";
 import useUser from "@/hooks/useUser";
-import { phoneNumberRegExp2 } from "@/utils/regex";
-import { changePhoneNumberApi } from "@/api/url";
+import { numberRegExp } from "@/utils/regex";
+import { changePhoneNumberApi, resetPinApi } from "@/api/url";
 import { processRequest } from "@/api/functions";
 
 const ChangePhoneNumber = () => {
   const { push, back } = router;
   const { otp, setOTP } = useFormContext();
   const pathname = usePathname();
-  const [phoneNumber, setPhoneNumber] = useState("");
+  const [pin, setPin] = useState("");
   const { userDetails, fetchUserDetails } = useUser();
-  const [phoneNumberErr, setPhoneNumberErr] = useState("");
+  const [pinErr, setPinErr] = useState("");
   const [loading, setLoading] = useState(false);
   const processForm = useCallback(() => {
     const errors = validateValues(
-      { phoneNumber },
+      { pin },
       {
-        phoneNumber: {
+        pin: {
           required: {
             value: true,
-            message: "Please provide your mobile number"
+            message: "Please provide your pin"
           },
           regex: {
-            value: phoneNumberRegExp2,
-            message: "Please input a valid mobile number"
+            value: numberRegExp,
+            message: "Please input a valid pin"
           }
         }
       }
     );
 
     if (errors) {
-      setPhoneNumberErr(errors?.phoneNumber);
+      setPinErr(errors?.pin);
     } else {
       if (otp) {
         setLoading(true);
-        processRequest(changePhoneNumberApi, {
-          phoneNumber: phoneNumber,
+        processRequest(resetPinApi, {
+          newPin: pin,
           otp
         })
           .then(() => {
-            fetchUserDetails(() => {
-              back();
-              push({
-                pathname: ScreenNames.VerificationResponse.path,
-                params: {
-                  description: "Phone number updated successfully",
-                  type: VerificationResponseType.success
-                }
-              });
+            back();
+            push({
+              pathname: ScreenNames.VerificationResponse.path,
+              params: {
+                description: "Pin reset successfully",
+                type: VerificationResponseType.success
+              }
             });
           })
           .catch((err) => {
@@ -96,10 +94,10 @@ const ChangePhoneNumber = () => {
         });
       }
     }
-  }, [phoneNumber, otp]);
+  }, [pin, otp]);
 
   useEffect(() => {
-    if (pathname === ScreenNames.ChangePhoneNumber.path && otp) {
+    if (pathname === ScreenNames.ResetPin.path && otp) {
       processForm();
     }
   }, [otp, pathname]);
@@ -111,22 +109,23 @@ const ChangePhoneNumber = () => {
       }}
     >
       <InputField
-        value={phoneNumber}
-        error={phoneNumberErr}
-        onChangeText={(phoneNumber) => {
-          if (phoneNumberRegExp2.test(phoneNumber) && phoneNumber.length < 12) {
-            setPhoneNumber(phoneNumber);
+        value={pin}
+        error={pinErr}
+        onChangeText={(pin) => {
+          if (numberRegExp.test(pin) && pin.length < 5) {
+            setPin(pin);
           }
-          setPhoneNumberErr("");
+          setPinErr("");
 
-          if (phoneNumberErr.length < 1) {
-            setPhoneNumber("");
+          if (pin.length < 1) {
+            setPin("");
           }
         }}
-        label="Phone number"
-        inputMode="tel"
+        secureTextEntry
+        label="New pin"
+        inputMode="numeric"
         keyboardType="phone-pad"
-        placeholder="Input phone number"
+        placeholder="Input new pin"
       />
 
       <Button

@@ -48,7 +48,7 @@ const AppContainer: React.FC<{ children: React.ReactNode }> = ({
   useEffect(() => {
     (async () => {
       const token = await getUserToken();
-      makeUseWithToken(token);
+      makeUseWithToken(token, true);
       setLocalServiceRan(true);
     })();
   }, []);

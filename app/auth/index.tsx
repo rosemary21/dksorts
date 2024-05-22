@@ -11,11 +11,8 @@ import { primaryColor } from "../../assets/colors";
 import { LoginBodyType, LoginResponseType } from "@/api/index.d";
 import { processRequest } from "@/api/functions";
 import { loginApi } from "@/api/url";
-import { showToast, validateValues } from "@/utils/functions";
+import { validateValues } from "@/utils/functions";
 import { phoneNumberRegExp } from "@/utils/regex";
-import { saveUserToken } from "@/localServices/function";
-import { useUserContext } from "@/context";
-import { setHeaderAuthorization } from "@/api";
 import useUser from "@/hooks/useUser";
 import useToast from "@/hooks/useToast";
 

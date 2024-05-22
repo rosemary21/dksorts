@@ -10,12 +10,14 @@ import useUser from "@/hooks/useUser";
 import LottieView from "lottie-react-native";
 import { Link } from "expo-router";
 import { copyToClipboard } from "@/utils/functions";
+import useToast from "@/hooks/useToast";
 
 const AddFundsCard = () => {
   const { userDetails } = useUser();
+  const { show } = useToast();
   return (
     userDetails &&
-    (!userDetails?.isAccountNonLocked ? (
+    (!userDetails?.accountNonLocked ? (
       <View
         style={{
           padding: 20,
@@ -87,10 +89,11 @@ const AddFundsCard = () => {
               </TextComponent>
             </View>
 
-            {userDetails && userDetails.isAccountNonLocked && (
+            {userDetails && userDetails.accountNonLocked && (
               <TouchableOpacity
                 onPress={() => {
                   copyToClipboard(userDetails.walletAccount);
+                  show("Account number copied to clipboard");
                 }}
               >
                 <Copy {...defaultIconProps} size={25} />

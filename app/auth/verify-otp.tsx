@@ -95,6 +95,9 @@ const OTPVerification = () => {
     case VerificationTypes.changePhoneNumber:
       pathname = ScreenNames.Account.path;
       break;
+    case VerificationTypes.resetPin:
+      pathname = "";
+      break;
     default:
       break;
   }
@@ -106,7 +109,6 @@ const OTPVerification = () => {
       sendSource: (type === "phone" ? phone : email) as string,
       notificationType: type === "phone" ? "S" : "M"
     };
-    console.log(data);
     setCodeType(type);
     processRequest(sendOTPApi, data)
       .then((res) => {
@@ -139,10 +141,6 @@ const OTPVerification = () => {
 
   const authenticateCode = (type: "phone" | "email") => {
     setCodeType(type);
-    console.log({
-      otp: type === "phone" ? phoneCode : emailCode,
-      otpId: (type === "phone" ? phone : email) as string
-    });
     processRequest(verifyOTPApi, {
       otp: type === "phone" ? phoneCode : emailCode,
       otpId: (type === "phone" ? phone : email) as string
@@ -217,6 +215,11 @@ const OTPVerification = () => {
         otp = phoneCode;
       }
       setOTP(otp);
+
+      back();
+      if (!shouldGoBack && (pathname.length > 0 || nextScreenName)) {
+        push((nextScreenName as string) || pathname);
+      }
     }
   }, [
     phone,

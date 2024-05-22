@@ -25,6 +25,8 @@ const ModalLayout: React.FC<{
   contentContainerStyle?: ViewStyle;
   children: React.ReactNode;
   hideHeader?: boolean;
+  onClose?: () => void;
+  removeAutoClose?: boolean;
   hideCancelButton?: boolean;
 }> = ({
   title,
@@ -32,7 +34,9 @@ const ModalLayout: React.FC<{
   contentContainerStyle,
   children,
   hideHeader,
-  hideCancelButton
+  hideCancelButton,
+  onClose,
+  removeAutoClose = null
 }) => {
   const { back } = router;
   return (
@@ -55,7 +59,15 @@ const ModalLayout: React.FC<{
         }}
       >
         <TouchableOpacity
-          onPress={back}
+          onPress={() => {
+            if (!removeAutoClose) {
+              back();
+            }
+
+            if (onClose && typeof onClose === "function") {
+              onClose();
+            }
+          }}
           style={{
             width: "100%",
             height: "100%",

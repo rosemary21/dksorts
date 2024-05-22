@@ -65,7 +65,6 @@ export const UserProvider: React.FC<FormProviderTypes> = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    console.log(state);
     if (state.token) {
       setHeaderAuthorization(state.token);
       saveUserToken(state.token);

@@ -79,7 +79,7 @@ const ChangePin = () => {
             push({
               pathname: ScreenNames.VerificationResponse.path,
               params: {
-                description: "Profile details updated successfully",
+                description: "Pin updated successfully",
                 type: VerificationResponseType.success
               }
             });
@@ -109,13 +109,22 @@ const ChangePin = () => {
       <InputField
         value={changePinForm.oldPin}
         error={changePinFormErr.oldPin}
+        inputMode="numeric"
+        keyboardType="phone-pad"
         onChangeText={(oldPin) => {
           if (numberRegExp.test(oldPin) && oldPin.length < 5) {
             setChangePinForm((prevState) => ({
               ...prevState,
               oldPin
             }));
-            setChangePinFormErr((prevState) => ({
+          }
+          setChangePinFormErr((prevState) => ({
+            ...prevState,
+            oldPin: ""
+          }));
+
+          if (oldPin.length < 1) {
+            setChangePinForm((prevState) => ({
               ...prevState,
               oldPin: ""
             }));
@@ -128,13 +137,22 @@ const ChangePin = () => {
       <InputField
         value={changePinForm.newPin}
         error={changePinFormErr.newPin}
+        inputMode="numeric"
+        keyboardType="phone-pad"
         onChangeText={(newPin) => {
           if (numberRegExp.test(newPin) && newPin.length < 5) {
             setChangePinForm((prevState) => ({
               ...prevState,
               newPin
             }));
-            setChangePinFormErr((prevState) => ({
+          }
+          setChangePinFormErr((prevState) => ({
+            ...prevState,
+            newPin: ""
+          }));
+
+          if (newPin.length < 1) {
+            setChangePinForm((prevState) => ({
               ...prevState,
               newPin: ""
             }));
@@ -147,13 +165,22 @@ const ChangePin = () => {
       <InputField
         value={changePinForm.repeatNewPin}
         error={changePinFormErr.repeatNewPin}
+        inputMode="numeric"
+        keyboardType="phone-pad"
         onChangeText={(repeatNewPin) => {
           if (numberRegExp.test(repeatNewPin) && repeatNewPin.length < 5) {
             setChangePinForm((prevState) => ({
               ...prevState,
               repeatNewPin
             }));
-            setChangePinFormErr((prevState) => ({
+          }
+          setChangePinFormErr((prevState) => ({
+            ...prevState,
+            repeatNewPin: ""
+          }));
+
+          if (repeatNewPin.length < 1) {
+            setChangePinForm((prevState) => ({
               ...prevState,
               repeatNewPin: ""
             }));

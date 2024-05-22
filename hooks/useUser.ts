@@ -3,7 +3,11 @@ import React, { useCallback } from "react";
 import { useUserContext } from "@/context";
 import { processRequest } from "@/api/functions";
 import { fetchUserDetailsApi } from "@/api/url";
-import { deleteUserToken, saveUserToken } from "@/localServices/function";
+import {
+  deleteUserToken,
+  getUserToken,
+  saveUserToken
+} from "@/localServices/function";
 import { abortOutgoingRequest, setHeaderAuthorization } from "@/api";
 import { GetUserDetailsResponseType } from "@/api/index.d";
 
@@ -32,7 +36,10 @@ const useUser = () => {
     async (token?: string | null, isLogin?: boolean) => {
       if (token) {
         if (isLogin) {
-          await saveUserToken(token);
+          const savedToken = await getUserToken();
+          if (!savedToken) {
+            await saveUserToken(token);
+          }
           setToken(token);
         }
         setHeaderAuthorization(token);
@@ -60,7 +67,6 @@ const useUser = () => {
       })
       .catch((err) => {
         const errorResponse = err?.response;
-        console.log("errorResponse", errorResponse);
         if (errorResponse?.code === "cv401") {
           logoutUser();
         } else {

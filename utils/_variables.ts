@@ -24,7 +24,8 @@ import {
   Brodcast,
   TableDocument,
   Scanner,
-  Sms
+  Sms,
+  Key
 } from "iconsax-react-native";
 import { Delete } from "lucide-react-native";
 
@@ -212,6 +213,13 @@ export const padding = 25,
       activeNames: ["/user/settings/pin"],
       showIn: [settings]
     },
+    ResetPin: {
+      path: "/user/settings/reset-pin",
+      Icon: Key,
+      label: "Reset Pin",
+      activeNames: ["/user/settings/reset-pin"],
+      showIn: [settings]
+    },
     RequestPin: {
       path: "/user/request-pin",
       Icon: Lock,
@@ -280,7 +288,8 @@ export const padding = 25,
     forgotPassword: "forgot-password",
     registration: "registration",
     changeEmail: "change-email",
-    changePhoneNumber: "change-phone-number"
+    changePhoneNumber: "change-phone-number",
+    resetPin: "reset-pin"
   },
   VerificationResponseType = {
     success: "Success",

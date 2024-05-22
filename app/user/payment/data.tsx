@@ -103,13 +103,11 @@ const PurchaseData = () => {
           amount: Number(dataPaymentForm.amount),
           pin
         };
-        console.log(data);
         setLoading(true);
 
         processRequest(createBillApi, data)
           .then((res) => {
             const response = res.response as PaymentSuccessfulResponseType;
-            console.log(res);
             setDataPaymentForm(initialValue);
             back();
             push({
@@ -122,7 +120,6 @@ const PurchaseData = () => {
             fetchUserDetails();
           })
           .catch((err) => {
-            console.log(err);
             push({
               pathname: ScreenNames.ErrorModal.path,
               params: {

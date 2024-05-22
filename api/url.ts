@@ -31,9 +31,13 @@ export const apiVersion = "/api/v1",
     method: requestType.post,
     url: "/verify/phonenumber"
   },
-  addBVNApi: ApiURLType = {
+  getBVNApi: ApiURLType = {
     method: requestType.post,
     url: "/bvn"
+  },
+  verifyBVNApi: ApiURLType = {
+    method: requestType.post,
+    url: "/bvn/verifybvn"
   },
   setPinApi: ApiURLType = {
     method: requestType.post,
@@ -68,16 +72,20 @@ export const apiVersion = "/api/v1",
     url: "/user/changepassword"
   },
   resetPasswordApi: ApiURLType = {
-    method: requestType.put,
+    method: requestType.post,
     url: "/user/resetpassword"
   },
   changeEmailApi: ApiURLType = {
-    method: requestType.put,
+    method: requestType.post,
     url: "/user/resetemail"
   },
   changePhoneNumberApi: ApiURLType = {
-    method: requestType.put,
+    method: requestType.post,
     url: "/user/resetphonenumber"
+  },
+  resetPinApi: ApiURLType = {
+    method: requestType.post,
+    url: "/pin/resetpin"
   },
   changeProfileApi: ApiURLType = {
     method: requestType.post,

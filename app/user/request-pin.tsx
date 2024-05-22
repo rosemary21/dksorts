@@ -2,7 +2,7 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import ModalLayout from "@/components/_layouts/ModalLayout";
 import TextComponent from "@/components/_general/TextComponent";
-import { backspaceText, showToast } from "@/utils/functions";
+import { backspaceText, showToast, Vibrate } from "@/utils/functions";
 import {
   defaultIconProps,
   generalError,
@@ -19,12 +19,51 @@ import { useFormContext } from "@/context";
 import useUser from "@/hooks/useUser";
 import { processRequest } from "@/api/functions";
 import { validatePinApi } from "@/api/url";
+import useToast from "@/hooks/useToast";
+import Animated, {
+  Easing,
+  useAnimatedStyle,
+  useSharedValue,
+  withRepeat,
+  withSequence,
+  withTiming
+} from "react-native-reanimated";
 
 const RequestPin = () => {
   const [pin, setPin] = useState("");
   const { setPin: savePin } = useFormContext();
   const { userDetails } = useUser();
   const { back, push } = router;
+  const { error } = useToast();
+
+  const shakeAnimation = useSharedValue(0);
+
+  const shakeStyle = useAnimatedStyle(() => {
+    return {
+      transform: [
+        {
+          translateX: shakeAnimation.value
+        }
+      ]
+    };
+  });
+
+  const startShake = () => {
+    shakeAnimation.value = withSequence(
+      withRepeat(
+        withTiming(15, {
+          duration: 100,
+          easing: Easing.linear
+        }),
+        6,
+        true
+      ),
+      withTiming(0, {
+        duration: 100,
+        easing: Easing.linear
+      })
+    );
+  };
 
   useEffect(() => {
     if (pin.length === 4) {
@@ -34,13 +73,16 @@ const RequestPin = () => {
           savePin(pin);
         })
         .catch((err) => {
-          push({
-            pathname: ScreenNames.ErrorModal.path,
-            params: {
-              error: err?.response?.data?.resp?.message ?? err?.statusText
-            }
-          });
-          showToast(err?.statusText || generalError);
+          // push({
+          //   pathname: ScreenNames.ErrorModal.path,
+          //   params: {
+          //     error: err?.response?.data?.resp?.message ?? err?.statusText
+          //   }
+          // });
+          // showToast(err?.statusText || generalError);
+          startShake();
+          Vibrate("short");
+          error(err?.response?.data?.resp?.message ?? err?.statusText);
         })
         .finally(() => {
           setPin("");
@@ -54,6 +96,8 @@ const RequestPin = () => {
     }
   }, [userDetails]);
 
+  useEffect(() => {});
+
   return (
     <ModalLayout
       title="Enter transaction pin"
@@ -61,12 +105,15 @@ const RequestPin = () => {
         gap: 50
       }}
     >
-      <TouchableOpacity
-        style={{
-          gap: ((windowWidth - padding * 2) * 0.2) / 3,
-          flexDirection: "row",
-          justifyContent: "center"
-        }}
+      <Animated.View
+        style={[
+          {
+            gap: ((windowWidth - padding * 2) * 0.2) / 3,
+            flexDirection: "row",
+            justifyContent: "center"
+          },
+          shakeStyle
+        ]}
       >
         <View
           style={{
@@ -96,7 +143,7 @@ const RequestPin = () => {
         >
           <TextComponent>{pin.slice(3, 4)}</TextComponent>
         </View>
-      </TouchableOpacity>
+      </Animated.View>
       <View
         style={{
           minHeight: windowHeight * 0.5 - 100
@@ -133,7 +180,10 @@ const RequestPin = () => {
                         setPin(newPin);
                       }
                     }}
-                    style={{}}
+                    style={{
+                      height: windowWidth * 0.15,
+                      width: windowWidth * 0.15
+                    }}
                     key={index}
                     letter={
                       type === "icon" && Icon ? (

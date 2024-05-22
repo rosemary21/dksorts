@@ -82,7 +82,6 @@ const ForgotPassword = () => {
           });
         })
         .catch((err) => {
-          console.log(err);
           error(
             err?.response?.data?.resp?.message ??
               err?.statusText ??

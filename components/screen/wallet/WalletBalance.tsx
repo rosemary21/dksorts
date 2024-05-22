@@ -11,9 +11,11 @@ import LottieView from "lottie-react-native";
 import { BalanceLoader } from "@/assets/lotties";
 import { Link } from "expo-router";
 import { copyToClipboard } from "@/utils/functions";
+import useToast from "@/hooks/useToast";
 
 const WalletBalance = () => {
   const { userDetails } = useUser();
+  const { show } = useToast();
   return (
     <View
       style={{
@@ -100,10 +102,11 @@ const WalletBalance = () => {
             )}
           </View>
 
-          {userDetails && userDetails.isAccountNonLocked && (
+          {userDetails && userDetails.accountNonLocked && (
             <TouchableOpacity
               onPress={() => {
                 copyToClipboard(userDetails.walletAccount);
+                show("Account number copied to clipboard");
               }}
             >
               <Copy {...defaultIconProps} size={25} />
@@ -112,7 +115,7 @@ const WalletBalance = () => {
         </View>
 
         {userDetails &&
-          (!userDetails?.isAccountNonLocked ? (
+          (!userDetails?.accountNonLocked ? (
             <Link
               href={ScreenNames.GenerateWallet.path}
               style={{ flexDirection: "row", alignItems: "center" }}

@@ -116,7 +116,6 @@ const ElectricityPayment = () => {
           .then((res) => {
             const response = res.response as PaymentSuccessfulResponseType;
             const rechargeToken = response?.data.recharge_token;
-            console.log(res);
             setElectricityPaymentForm(initialValue);
             back();
             push({
@@ -292,7 +291,7 @@ const ElectricityPayment = () => {
                 amount: ""
               }));
             }}
-            label="Amount"
+            label="Amount (₦)"
             placeholder="Input amount"
             inputMode="numeric"
             keyboardType="phone-pad"

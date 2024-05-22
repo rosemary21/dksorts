@@ -43,7 +43,7 @@ const Settings = () => {
       >
         <View>
           <ProfileImage size={100} />
-          <TouchableOpacity
+          {/* <TouchableOpacity
             style={{
               backgroundColor: primaryColor.default,
               height: 30,
@@ -57,7 +57,7 @@ const Settings = () => {
             }}
           >
             <Edit {...defaultIconProps} color={whiteColor.default} />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
 
         <View>

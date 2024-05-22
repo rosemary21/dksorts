@@ -68,7 +68,7 @@ const Airtime = () => {
         },
         regex: {
           value: phoneNumberRegExp2,
-          message: "PLease input a valid mobile number"
+          message: "Pease input a valid mobile number"
         }
       },
       billerCode: {
@@ -110,7 +110,6 @@ const Airtime = () => {
 
         processRequest(createBillApi, data)
           .then((res) => {
-            console.log(res);
             const response = res.response as PaymentSuccessfulResponseType;
             setAirtimePaymentForm(initialValue);
             back();
@@ -223,7 +222,7 @@ const Airtime = () => {
                 amount: ""
               }));
             }}
-            label="Amount"
+            label="Amount (₦)"
             placeholder="Input amount"
             inputMode="numeric"
             keyboardType="phone-pad"
