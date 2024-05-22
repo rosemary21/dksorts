@@ -8,8 +8,8 @@ import {
 } from "@/utils/_variables";
 import { constructVerificationTypeObject } from "@/utils/functions";
 import { Redirect, router, Slot, Stack, usePathname } from "expo-router";
-import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
+import { StatusBar } from "react-native";
 
 export default function GeneralLayout() {
   const { token } = useUserContext();
@@ -71,7 +71,7 @@ export default function GeneralLayout() {
 
   return (
     <>
-      <StatusBar style="light" />
+      <StatusBar barStyle="dark-content" />
       <Stack
         screenOptions={{
           headerShown: false,

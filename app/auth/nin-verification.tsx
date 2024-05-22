@@ -32,9 +32,9 @@ const NINVerification = () => {
   const { fetchUserDetails } = useUser();
   const [ninErr, setNinErr] = useState("");
   const [loading, setLoading] = useState(false);
+  const { error } = useToast();
 
   const processNIN = useCallback(() => {
-    const { error } = useToast();
     const errors = validateValues(
       { nin },
       {
@@ -97,10 +97,14 @@ const NINVerification = () => {
     >
       <InputField
         value={nin}
-        onChangeText={(pin) => {
-          if (numberRegExp.test(pin) && pin.length < 12) {
+        onChangeText={(nin) => {
+          setNinErr("");
+          if (nin.length > 0 && numberRegExp.test(nin) && nin.length < 12) {
             setNin(nin);
-            setNinErr("");
+          }
+
+          if (nin.length < 1) {
+            setNin("");
           }
         }}
         error={ninErr}

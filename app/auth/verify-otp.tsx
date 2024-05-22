@@ -20,7 +20,12 @@ import {
 import Button from "@/components/_general/Button";
 import { ArrowRight, Verify } from "iconsax-react-native";
 import { processRequest } from "@/api/functions";
-import { sendOTPApi, verifyEmailApi, verifyOTPApi } from "@/api/url";
+import {
+  sendOTPApi,
+  verifyEmailApi,
+  verifyOTPApi,
+  verifyPhoneNumberApi
+} from "@/api/url";
 import { RequestOTPBodyType } from "@/api/index.d";
 import { showToast } from "@/utils/functions";
 import { useFormContext } from "@/context";
@@ -50,7 +55,7 @@ const OTPVerification = () => {
   const [codeSending, setCodeSending] = useState(false);
   const [loading, setLoading] = useState(false);
   const [codeType, setCodeType] = useState<"phone" | "email" | null>();
-  const { error } = useToast();
+  const { error, show } = useToast();
   const { push, back } = router;
   const initialValue: RequestOTPBodyType = {
     otpId: "",
@@ -80,12 +85,9 @@ const OTPVerification = () => {
   switch (verificationType) {
     case VerificationTypes.forgotPassword:
       pathname = ScreenNames.ChangePassword.path;
-
-      initialValue.otpType = "F";
       break;
     case VerificationTypes.registration:
       pathname = ScreenNames.NINVerification.path;
-      initialValue.otpType = "R";
       break;
     case VerificationTypes.changeEmail:
       pathname = ScreenNames.Account.path;
@@ -101,11 +103,18 @@ const OTPVerification = () => {
     const data: RequestOTPBodyType = {
       ...initialValue,
       otpId: (type === "phone" ? phone : email) as string,
-      sendSource: (type === "phone" ? phone : email) as string
+      sendSource: (type === "phone" ? phone : email) as string,
+      notificationType: type === "phone" ? "S" : "M"
     };
+    console.log(data);
     setCodeType(type);
     processRequest(sendOTPApi, data)
       .then((res) => {
+        show(
+          `OTP sent to your ${
+            type === "phone" ? "phone number" : "email"
+          } successfully`
+        );
         if (type === "phone") {
           setPhoneCodeSent(true);
           setTimeout(() => {
@@ -130,11 +139,20 @@ const OTPVerification = () => {
 
   const authenticateCode = (type: "phone" | "email") => {
     setCodeType(type);
+    console.log({
+      otp: type === "phone" ? phoneCode : emailCode,
+      otpId: (type === "phone" ? phone : email) as string
+    });
     processRequest(verifyOTPApi, {
       otp: type === "phone" ? phoneCode : emailCode,
       otpId: (type === "phone" ? phone : email) as string
     })
       .then(() => {
+        show(
+          `${
+            type === "phone" ? "Phone number" : "Email"
+          } OTP Verified successfully`
+        );
         if (type === "phone") {
           setPhoneCodeVerified(true);
         } else {
@@ -164,7 +182,7 @@ const OTPVerification = () => {
           otp: emailCode,
           phoneNumber: phone as string
         });
-        const verifyPhone = processRequest(verifyEmailApi, {
+        const verifyPhone = processRequest(verifyPhoneNumberApi, {
           emailAddress: email as string,
           otp: phoneCode,
           phoneNumber: phone as string
@@ -215,7 +233,7 @@ const OTPVerification = () => {
       title="Verification"
       description="Please verify your account to proceed"
     >
-      {!hideEmail && (
+      {email && (
         <InputField
           value={emailCode}
           ref={emailRef}
@@ -292,7 +310,7 @@ const OTPVerification = () => {
           }
         />
       )}
-      {(verificationType === VerificationTypes.registration || phone) && (
+      {phone && (
         <InputField
           ref={phoneRef}
           editable={!phoneCodeSent || phoneCodeVerified ? false : true}
@@ -301,7 +319,7 @@ const OTPVerification = () => {
               setPhoneCode(code);
             }
             if (code.length < 1) {
-              setEmailCode("");
+              setPhoneCode("");
             }
           }}
           label={`Phone (${phone})`}
@@ -315,10 +333,10 @@ const OTPVerification = () => {
                 <TouchableOpacity
                   onPress={() => {
                     if (!codeType && !phoneCodeVerified) {
-                      if (!emailCodeSent) {
+                      if (!phoneCodeSent) {
                         sendCode("phone");
                       } else {
-                        if (emailCode.length > 0) {
+                        if (phoneCode.length > 0) {
                           authenticateCode("phone");
                         } else {
                           sendCode("phone");
@@ -368,11 +386,9 @@ const OTPVerification = () => {
           }
         />
       )}
-      {((verificationType === VerificationTypes.registration &&
-        phoneCodeVerified &&
-        emailCodeVerified) ||
-        (verificationType !== VerificationTypes.registration &&
-          (emailCodeVerified || phoneCodeVerified))) && (
+      {((phone && email && phoneCodeVerified && emailCodeVerified) ||
+        (phone && !email && phoneCodeVerified) ||
+        (email && !phone && emailCodeVerified)) && (
         <Button
           loading={loading}
           action={processOTP}

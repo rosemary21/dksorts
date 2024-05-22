@@ -53,17 +53,18 @@ const GenerateWallet = () => {
       setLoading(true);
       processRequest(addBVNApi, { bvn })
         .then((res) => {
-          fetchUserDetails();
-          back();
-          push({
-            pathname: ScreenNames.VerificationResponse.path,
-            params: {
-              nextScreenName: !userDetails?.pinStatus
-                ? ScreenNames.CreatePin.path
-                : undefined,
-              description: `BVN added successfully`,
-              type: VerificationResponseType.success
-            }
+          fetchUserDetails(() => {
+            back();
+            push({
+              pathname: ScreenNames.VerificationResponse.path,
+              params: {
+                nextScreenName: !userDetails?.pinStatus
+                  ? ScreenNames.CreatePin.path
+                  : undefined,
+                description: `BVN added successfully`,
+                type: VerificationResponseType.success
+              }
+            });
           });
         })
         .catch((err) => {
@@ -100,8 +101,19 @@ const GenerateWallet = () => {
       </TextComponent>
 
       <InputField
+        keyboardType="phone-pad"
+        inputMode="numeric"
         value={bvn}
-        onChangeText={setBvn}
+        onChangeText={(bvn) => {
+          if (bvn.length > 0 && numberRegExp.test(bvn) && bvn.length < 12) {
+            setBvn(bvn);
+          }
+          setBvnErr("");
+
+          if (bvn.length < 1) {
+            setBvn("");
+          }
+        }}
         error={bvnErr}
         placeholder="Your BVN"
       />

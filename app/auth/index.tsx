@@ -22,7 +22,7 @@ import useToast from "@/hooks/useToast";
 const Login = () => {
   const { push } = router;
   const { makeUseWithToken } = useUser();
-  const { success, error } = useToast();
+  const { show, error } = useToast();
   const initialFormValue: LoginBodyType = {
     deviceId: deviceDetails.osInternalBuildId || deviceDetails.osBuildId || "",
     deviceName: deviceDetails.name || "",
@@ -66,7 +66,7 @@ const Login = () => {
 
           if (token) {
             makeUseWithToken(token, true);
-            success("Login successful");
+            show("Login successful");
           } else {
             push({
               pathname: ScreenNames.ErrorModal.path,

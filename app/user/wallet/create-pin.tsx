@@ -47,14 +47,16 @@ const CreatePin = () => {
     setLoading(true);
     processRequest(setPinApi, { pin })
       .then((res) => {
-        fetchUserDetails();
-        back();
-        push({
-          pathname: ScreenNames.VerificationResponse.path,
-          params: {
-            description: `Pin set successfully`,
-            type: VerificationResponseType.success
-          }
+        fetchUserDetails(()=>{
+          back();
+          push({
+            pathname: ScreenNames.VerificationResponse.path,
+            params: {
+              description: `Pin set successfully`,
+              type: VerificationResponseType.success
+            }
+          });
+
         });
       })
       .catch((err) => {
