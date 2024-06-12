@@ -3,6 +3,7 @@ import { VibrationTypes } from "./types";
 import { vibrationLengths } from "./data";
 import Toast, { ToastOptions } from "react-native-root-toast";
 import { Clipboard } from "react-native";
+import * as WebBrowser from "expo-web-browser";
 
 export const backspaceText: (
   text: string,
@@ -173,6 +174,9 @@ export const copyToClipboard = (text: string) => {
   Clipboard.setString(text);
 };
 
+export const openBrowser = (link: string) => {
+  WebBrowser.openBrowserAsync(link);
+};
 export const addText: (
   text: string,
   letter: string,

@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "D'Keralutive",
+    "name": "D'Kerulative",
     "slug": "dkelucrative",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -18,7 +18,8 @@
       "supportsTablet": true
     },
     "androidStatusBar": {
-      "barStyle": "dark-content"
+      "barStyle": "light-content",
+      "backgroundColor": "#00000000"
     },
     "android": {
       "adaptiveIcon": {

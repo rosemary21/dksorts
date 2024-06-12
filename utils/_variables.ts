@@ -67,6 +67,10 @@ export const padding = 25,
     osName: Device.osName,
     osVersion: Device.osVersion
   },
+  ExternalUrls = {
+    privacyPolicy: "http://dkerulative.com.ng/privacy",
+    termsCondition: "http://dkerulative.com.ng/terms"
+  },
   modalScreenOptions = {
     animation: "fade_from_bottom",
     presentation: "transparentModal",

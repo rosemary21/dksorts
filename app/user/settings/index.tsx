@@ -3,6 +3,7 @@ import React from "react";
 import LoggedInContainer from "@/components/_layouts/LoggedInContainer";
 import {
   defaultIconProps,
+  ExternalUrls,
   padding,
   settingsRoutes,
   windowWidth
@@ -23,6 +24,7 @@ import { setHeaderAuthorization } from "@/api";
 import { deleteUserToken } from "@/localServices/function";
 import { useUserContext } from "@/context";
 import useUser from "@/hooks/useUser";
+import { openBrowser } from "@/utils/functions";
 
 const Settings = () => {
   const { push } = router;
@@ -114,6 +116,9 @@ const Settings = () => {
           </TouchableOpacity>
         ))}
         <TouchableOpacity
+          onPress={() => {
+            openBrowser(ExternalUrls.privacyPolicy);
+          }}
           style={{
             padding: 20,
             backgroundColor: "#E6E6E6",
