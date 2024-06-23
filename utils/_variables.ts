@@ -162,7 +162,7 @@ export const padding = 25,
       path: "/user/wallet",
       Icon: Wallet,
       ActiveIcon: Wallet1,
-      label: "Wallet",
+      label: "Voucher",
       activeNames: ["/user/wallet"],
       showIn: [nav]
     },
