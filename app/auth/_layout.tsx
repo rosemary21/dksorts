@@ -8,11 +8,7 @@ const AuthLayout = () => {
   const { token } = useUserContext();
   const pathname = usePathname();
 
-  if (
-    token &&
-    pathname !== ScreenNames.VerifyOTP.path &&
-    pathname !== ScreenNames.NINVerification.path
-  ) {
+  if (token && pathname !== ScreenNames.VerifyOTP.path) {
     return <Redirect href={ScreenNames.Dashboard.path} />;
   }
   return (

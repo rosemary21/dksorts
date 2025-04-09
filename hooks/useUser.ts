@@ -50,7 +50,7 @@ const useUser = () => {
   );
   const fetchUserDetails = useCallback((func?: () => void) => {
     processRequest(
-      fetchUserDetailsApi,
+      fetchUserDetailsApi(),
       {},
       {
         signal: controller.signal
@@ -58,8 +58,9 @@ const useUser = () => {
     )
       .then((res) => {
         const response = res?.response as GetUserDetailsResponseType;
-        const userDetails = response.data.customerDetails;
-        const transactionDetails = response.data.transactionDtos;
+        const userDetails = response?.data?.customerDetails;
+        const transactionDetails = response?.data?.transactionDtos;
+        console.log("transactionDetails", transactionDetails);
         setUserDetails(userDetails);
         setUserTransactions(transactionDetails);
         if (func && typeof func === "function") {

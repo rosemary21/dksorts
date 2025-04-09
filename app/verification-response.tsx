@@ -57,6 +57,7 @@ const VerificationResponse = () => {
           {type}
         </TextComponent>
         <TextComponent
+          textAlign="center"
           style={{
             opacity: 0.6
           }}

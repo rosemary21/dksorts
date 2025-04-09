@@ -20,6 +20,7 @@ const ScreenStacks = () => {
         }
       }}
     >
+      {/* <Stack.Screen name={ScreenNames.GettingStarted.path} /> */}
       <Stack.Screen
         name={"error-modal"}
         options={{

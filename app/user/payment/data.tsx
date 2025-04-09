@@ -104,10 +104,11 @@ const PurchaseData = () => {
           pin
         };
         setLoading(true);
-
+        console.log("data", data);
         processRequest(createBillApi, data)
           .then((res) => {
             const response = res.response as PaymentSuccessfulResponseType;
+            console.log("payment response", response);
             setDataPaymentForm(initialValue);
             back();
             push({

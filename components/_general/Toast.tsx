@@ -129,7 +129,9 @@ const Toast = () => {
           elevation: 5
         }}
       >
-        <TextComponent color={textColor}>{message}</TextComponent>
+        <TextComponent textAlign="center" color={textColor}>
+          {message}
+        </TextComponent>
       </TouchableOpacity>
     </Animated.View>
   );

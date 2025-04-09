@@ -42,6 +42,7 @@ export const setHeaderAuthorization: (token?: string) => void = (token) => {
             });
           })
           .catch((err: AxiosError<ErrorResponseType, ErrorResponseType>) => {
+            console.log("Error", err?.toJSON());
             reject({
               type: status.error,
               code: err?.response?.status || err?.code,
@@ -79,6 +80,7 @@ export const setHeaderAuthorization: (token?: string) => void = (token) => {
           });
         })
         .catch((err: AxiosError<ErrorResponseType, ErrorResponseType>) => {
+          console.log("Error", err?.toJSON());
           reject({
             type: status.error,
             code: err?.response?.status || err?.code,
@@ -110,6 +112,7 @@ export const setHeaderAuthorization: (token?: string) => void = (token) => {
             });
           })
           .catch((err: AxiosError<ErrorResponseType, ErrorResponseType>) => {
+            console.log("Error", err?.toJSON());
             reject({
               type: status.error,
               code: err?.response?.status || err?.code,
@@ -147,6 +150,7 @@ export const setHeaderAuthorization: (token?: string) => void = (token) => {
           });
         })
         .catch((err: AxiosError<ErrorResponseType, ErrorResponseType>) => {
+          console.log("Error", err?.toJSON());
           reject({
             type: status.error,
             code: err?.response?.status || err?.code,

@@ -82,7 +82,7 @@ export const padding = 25,
     [path: string]: ScreenNamesType;
   } = {
     GettingStarted: {
-      path: "/",
+      path: "index",
       Icon: undefined,
       label: "Getting started",
       activeNames: ["/"],
@@ -145,10 +145,10 @@ export const padding = 25,
       showIn: []
     },
     Dashboard: {
-      path: "/user",
+      path: "user",
       Icon: Home,
       label: "Dashboard",
-      activeNames: ["/user"],
+      activeNames: ["/user/"],
       showIn: [nav]
     },
     Payments: {

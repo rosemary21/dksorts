@@ -253,7 +253,7 @@ export const formatSeconds = (sec: number) => {
 
 export const showToast = (message: string, options?: ToastOptions): void => {
   Toast.show(message, {
-    position: Toast.positions.BOTTOM,
+    position: Toast.positions.TOP,
     animation: true,
     hideOnPress: true,
     ...options

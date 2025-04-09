@@ -15,6 +15,7 @@ import {
   defaultIconProps,
   generalError,
   ScreenNames,
+  VerificationResponseType,
   VerificationTypes
 } from "@/utils/_variables";
 import Button from "@/components/_general/Button";
@@ -83,12 +84,23 @@ const OTPVerification = () => {
     }
   };
 
+  // push({
+  //               pathname: ScreenNames.VerificationResponse.path,
+  //               params: {
+  //                 nextScreenName: shouldGoBack
+  //                   ? undefined
+  //                   : nextScreenName || ScreenNames.Login.path,
+  //                 description: "NIN Saved successfully",
+  //                 type: VerificationResponseType.success
+  //               }
+  //             });
+
   switch (verificationType) {
     case VerificationTypes.forgotPassword:
       pathname = ScreenNames.ChangePassword.path;
       break;
     case VerificationTypes.registration:
-      pathname = ScreenNames.NINVerification.path;
+      pathname = ScreenNames.VerificationResponse.path;
       break;
     case VerificationTypes.changeEmail:
       pathname = ScreenNames.Account.path;
@@ -184,7 +196,6 @@ const OTPVerification = () => {
             })
           : undefined;
 
-        console.log(verifyEmail);
         const verifyPhone = processRequest(verifyPhoneNumberApi, {
           emailAddress: (email ?? userDetails?.email) as string,
           otp: phoneCode,
@@ -204,7 +215,16 @@ const OTPVerification = () => {
             back();
 
             if (!shouldGoBack) {
-              push((nextScreenName as string) || pathname);
+              push({
+                pathname: (nextScreenName as string) || pathname,
+                params: {
+                  nextScreenName: shouldGoBack
+                    ? undefined
+                    : nextScreenName || ScreenNames.Login.path,
+                  description: "OTP Verified successfully",
+                  type: VerificationResponseType.success
+                }
+              });
             }
           });
         }

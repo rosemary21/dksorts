@@ -34,18 +34,8 @@ export default function GeneralLayout() {
           userDetails?.emailVerificationStatus &&
           userDetails?.phoneNumberStatus
         ) {
-          if (userDetails?.ninStatus) {
-            if (!userDetails?.bvnStatus) {
-              push(ScreenNames.GenerateWallet.path);
-            }
-          } else {
-            setEmailAddress(userDetails?.email);
-            push({
-              pathname: ScreenNames.NINVerification.path,
-              params: {
-                shouldGoBack: "true"
-              }
-            });
+          if (!userDetails?.bvnStatus) {
+            push(ScreenNames.GenerateWallet.path);
           }
         } else {
           push({
@@ -71,7 +61,11 @@ export default function GeneralLayout() {
 
   return (
     <>
-      <StatusBar barStyle="dark-content" />
+      <StatusBar
+        barStyle="dark-content"
+        backgroundColor={"transparent"}
+        translucent
+      />
       <Stack
         screenOptions={{
           headerShown: false,
